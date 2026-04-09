@@ -30,6 +30,17 @@ body {
   font-family: 'Noto Sans Arabic', 'Segoe UI', sans-serif;
 }
 
+/* Keep Material Icons readable in RTL/Arabic (ligature font). */
+mat-icon,
+.mat-icon,
+.material-icons {
+  font-family: 'Material Icons', sans-serif !important;
+  direction: ltr;
+  unicode-bidi: isolate;
+  letter-spacing: normal;
+  font-feature-settings: 'liga';
+}
+
 /* Legacy helpers — prefer apple-* classes for new UI */
 .app-shell {
   max-width: 980px;
@@ -76,4 +87,9 @@ body {
 .mat-mdc-card.app-surface-card:hover {
   box-shadow: none;
   transform: none;
+}
+
+:lang(ar) {
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
 }

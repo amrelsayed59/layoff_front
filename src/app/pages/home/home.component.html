@@ -3,7 +3,11 @@
     <h1 id="hero-heading" class="apple-display-hero">{{ 'APP.TITLE' | translate }}</h1>
     <p class="apple-hero__sub">{{ 'APP.SUBTITLE' | translate }}</p>
     <div class="apple-hero__cta">
-      <a [routerLink]="['/']" fragment="stories" class="apple-pill apple-pill--on-dark">
+      <a
+        href="#stories"
+        class="apple-pill apple-pill--on-dark"
+        (click)="scrollToAnchor($event, 'stories')"
+      >
         {{ 'HOME.CTA_LEARN' | translate }}
       </a>
       <a routerLink="/submit" class="apple-btn apple-btn--primary">{{ 'HOME.CTA_SUBMIT' | translate }}</a>
@@ -11,7 +15,12 @@
   </div>
 </section>
 
-<section id="stories" class="apple-section apple-section--light apple-section--padded-bottom">
+
+<section
+  id="stories"
+  #storiesSection
+  class="apple-section apple-section--light apple-section--padded-bottom"
+>
   <div class="apple-container">
     <h2 class="apple-section-heading">{{ 'HOME.STORIES_SECTION_TITLE' | translate }}</h2>
     <p class="apple-body">{{ 'HOME.LEAD' | translate }}</p>
@@ -118,7 +127,7 @@
                 @if (story.date) {
                   <span class="apple-tile__meta-item">
                     <mat-icon class="apple-meta-icon" fontSet="material-icons">calendar_today</mat-icon>
-                    {{ story.date }}
+                    {{ story.date | date: 'MMM yyyy' }}
                   </span>
                 }
               </div>
@@ -129,7 +138,7 @@
                   }
                 </div>
               }
-              <p class="apple-caption">
+              <p class="apple-caption" [class.home-story-preview--clamped]="!isExpanded(story.id)">
                 {{ isExpanded(story.id) ? (story.fullText || story.preview) : story.preview }}
               </p>
               <div class="apple-tile__actions">
@@ -137,12 +146,14 @@
                   {{ isExpanded(story.id) ? ('HOME.SHOW_LESS' | translate) : ('HOME.READ_MORE' | translate) }}
                   <span class="apple-link__chevron" aria-hidden="true">›</span>
                 </button>
+                <button type="button" class="apple-link" (click)="openReport(story)">
+                  {{ 'REPORT.BTN' | translate }}
+                </button>
               </div>
             </div>
           </article>
         }
       </div>
-
       <div class="home-load-more">
         @if (loadingMore()) {
           <div class="home-bottom-loader" aria-label="{{ 'HOME.LOADING_MORE' | translate }}">
@@ -154,3 +165,4 @@
     }
   </div>
 </section>
+

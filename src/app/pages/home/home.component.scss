@@ -119,6 +119,13 @@
   animation: homeShimmer 1.25s infinite;
 }
 
+.home-story-preview--clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
 @keyframes homeShimmer {
   0% {
     background-position: 0% 0%;

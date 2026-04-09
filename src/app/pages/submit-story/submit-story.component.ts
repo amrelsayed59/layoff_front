@@ -1,6 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, viewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 
 import { MATERIAL_FORM } from '../../shared/material-imports';
 import { StoriesApiService } from '../../core/stories-api.service';
@@ -27,17 +28,18 @@ export const STORY_REASON_OPTIONS = [
 ] as const;
 
 /**
- * Form for submitting a new layoff story (client-side only until an API exists).
+ * Multi-step form for submitting a new layoff story.
  */
 @Component({
   selector: 'app-submit-story',
-  imports: [ReactiveFormsModule, TranslatePipe, ...MATERIAL_FORM],
+  imports: [ReactiveFormsModule, TranslatePipe, MatStepperModule, ...MATERIAL_FORM],
   templateUrl: './submit-story.component.html',
   styleUrl: './submit-story.component.scss',
 })
 export class SubmitStoryComponent {
   private readonly fb = inject(FormBuilder);
   private readonly storiesApi = inject(StoriesApiService);
+  private readonly stepper = viewChild(MatStepper);
 
   /** When true, shows a simple confirmation state after a valid submit. */
   protected readonly submitted = signal(false);
@@ -47,12 +49,20 @@ export class SubmitStoryComponent {
   protected readonly industries = STORY_INDUSTRY_OPTIONS;
   protected readonly reasons = STORY_REASON_OPTIONS;
 
-  protected readonly form = this.fb.group({
+  protected readonly workGroup = this.fb.group({
     company: [''],
     role: ['', Validators.required],
     industry: ['', Validators.required],
+  });
+
+  protected readonly layoffGroup = this.fb.group({
     layoffDate: [null as Date | null, Validators.required],
     reason: ['', Validators.required],
+    location: [''],
+    severance: [''],
+  });
+
+  protected readonly storyGroup = this.fb.group({
     story: ['', [Validators.required, Validators.minLength(20)]],
     anonymous: [false],
   });
@@ -62,28 +72,34 @@ export class SubmitStoryComponent {
    */
   protected onSubmit(): void {
     this.error.set(null);
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    this.workGroup.markAllAsTouched();
+    this.layoffGroup.markAllAsTouched();
+    this.storyGroup.markAllAsTouched();
+
+    if (this.workGroup.invalid || this.layoffGroup.invalid || this.storyGroup.invalid) {
       return;
     }
 
-    const v = this.form.getRawValue();
-    const layoffDate = v.layoffDate instanceof Date ? v.layoffDate : null;
+    const w = this.workGroup.getRawValue();
+    const l = this.layoffGroup.getRawValue();
+    const s = this.storyGroup.getRawValue();
+    const layoffDate = l.layoffDate instanceof Date ? l.layoffDate : null;
     if (!layoffDate) {
-      this.form.controls.layoffDate.markAsTouched();
       return;
     }
 
     this.loading.set(true);
     this.storiesApi
       .submitStory({
-        company: v.company || undefined,
-        role: v.role!,
-        industry: v.industry!,
+        company: w.company || undefined,
+        role: w.role!,
+        industry: w.industry!,
+        location: l.location?.trim() || undefined,
         layoffDate: layoffDate.toISOString(),
-        reason: v.reason!,
-        story: v.story!,
-        isAnonymous: v.anonymous ?? false,
+        reason: l.reason!,
+        severance: l.severance?.trim() || undefined,
+        story: s.story!,
+        isAnonymous: s.anonymous ?? false,
       })
       .subscribe({
         next: () => {
@@ -101,9 +117,12 @@ export class SubmitStoryComponent {
    * Returns the user to the form to submit another entry.
    */
   protected resetForm(): void {
-    this.form.reset({ anonymous: false, layoffDate: null });
+    this.workGroup.reset();
+    this.layoffGroup.reset({ layoffDate: null, location: '', severance: '' });
+    this.storyGroup.reset({ anonymous: false, story: '' });
     this.submitted.set(false);
     this.error.set(null);
     this.loading.set(false);
+    this.stepper()?.reset();
   }
 }

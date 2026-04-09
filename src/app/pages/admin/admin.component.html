@@ -9,35 +9,133 @@
         {{ 'ADMIN.SIGN_OUT' | translate }}
       </button>
     </div>
+
     @if (error()) {
       <p class="apple-error-text" role="alert">{{ error() }}</p>
     }
+
+    <mat-tab-group
+      class="admin-tabs"
+      [selectedIndex]="tabIndex()"
+      (selectedIndexChange)="onTabChange($event)"
+      animationDuration="200ms"
+    >
+      @for (tab of inboxTabs; track tab.view) {
+        <mat-tab>
+          <ng-template mat-tab-label>{{ tab.labelKey | translate }}</ng-template>
+        </mat-tab>
+      }
+    </mat-tab-group>
+
+    <div class="admin-toolbar apple-card-dark apple-stack-gap" style="padding: 16px 20px">
+      <div class="apple-row-between" style="align-items: center; flex-wrap: wrap; gap: 12px">
+        <div class="d-flex flex-wrap" style="gap: 12px; align-items: center">
+          <mat-checkbox
+            [checked]="allSelected()"
+            [disabled]="rows().length === 0 || loading()"
+            (change)="toggleSelectAll($event.checked)"
+          >
+            {{ 'ADMIN.SELECT_ALL' | translate }}
+          </mat-checkbox>
+          <button
+            type="button"
+            class="apple-link"
+            [disabled]="selectedCount() === 0"
+            (click)="clearSelection()"
+          >
+            {{ 'ADMIN.CLEAR_SELECTION' | translate }}
+          </button>
+          <span class="apple-caption apple-text-on-dark-muted">
+            {{ 'ADMIN.SELECTED_COUNT' | translate: { count: selectedCount() } }}
+          </span>
+        </div>
+        <div class="d-flex flex-wrap" style="gap: 10px">
+          @if (bulkApproveVisible()) {
+            <button
+              type="button"
+              class="apple-btn apple-btn--primary"
+              [disabled]="selectedCount() === 0 || loading()"
+              (click)="bulk('approve')"
+            >
+              {{ 'ADMIN.BULK_APPROVE' | translate }}
+            </button>
+          }
+          @if (bulkRejectVisible()) {
+            <button
+              type="button"
+              class="apple-btn apple-btn--dark"
+              [disabled]="selectedCount() === 0 || loading()"
+              (click)="bulk('reject')"
+            >
+              {{ 'ADMIN.BULK_REJECT' | translate }}
+            </button>
+          }
+          @if (bulkUnapproveVisible()) {
+            <button
+              type="button"
+              class="apple-btn apple-btn--dark"
+              [disabled]="selectedCount() === 0 || loading()"
+              (click)="bulk('unapprove')"
+            >
+              {{ 'ADMIN.BULK_UNAPPROVE' | translate }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
     @if (loading()) {
       <p class="apple-caption">{{ 'ADMIN.LOADING' | translate }}</p>
     }
-    @if (pending().length === 0) {
-      <p class="apple-caption">{{ 'ADMIN.EMPTY' | translate }}</p>
-    } @else {
+
+    @if (!loading() && rows().length === 0) {
+      <p class="apple-caption">{{ 'ADMIN.EMPTY_TAB' | translate }}</p>
+    }
+
+    @if (!loading() && rows().length > 0) {
       <div class="apple-stack-gap-lg">
-        @for (story of pending(); track story.id) {
+        @for (row of rows(); track row.id) {
           <div class="apple-card-dark apple-stack-gap">
-            <div class="apple-row-between" style="align-items: center">
-              <div>
-                <h2 class="apple-tile-heading apple-text-on-dark-title">{{ story.company }}</h2>
-                <p class="apple-caption apple-text-on-dark-muted" style="margin-top: 4px">{{ story.role }}</p>
+            <div class="apple-row-between" style="align-items: flex-start; gap: 12px">
+              <mat-checkbox
+                [checked]="isSelected(row.id)"
+                [disabled]="loading()"
+                (change)="toggleRow(row.id, $event.checked)"
+              />
+              <div style="flex: 1; min-width: 0">
+                <div class="apple-row-between" style="align-items: center; gap: 8px">
+                  <div>
+                    <h2 class="apple-tile-heading apple-text-on-dark-title">{{ row.companyLabel }}</h2>
+                    <p class="apple-caption apple-text-on-dark-muted" style="margin-top: 4px">{{ row.role }}</p>
+                  </div>
+                  <span class="apple-status-pill" [attr.aria-label]="statusAriaKey(row) | translate">
+                    {{ statusLabelKey(row) | translate }}
+                  </span>
+                </div>
+                @if (currentView() === 'reported' && reportCount(row) > 0) {
+                  <p class="apple-caption apple-text-on-dark-muted" style="margin-top: 8px">
+                    {{ 'ADMIN.REPORTS_COUNT' | translate: { count: reportCount(row) } }}
+                  </p>
+                }
+                <p class="apple-caption apple-text-on-dark-body" style="margin-top: 8px">{{ row.preview }}</p>
+                <div class="d-flex flex-wrap" style="gap: 12px; margin-top: 8px">
+                  @if (rowApproveVisible()) {
+                    <button type="button" class="apple-btn apple-btn--primary" (click)="approveOne(row)">
+                      {{ 'ADMIN.APPROVE' | translate }}
+                    </button>
+                  }
+                  @if (rowRejectVisible()) {
+                    <button type="button" class="apple-btn apple-btn--dark" (click)="rejectOne(row)">
+                      {{ 'ADMIN.REJECT' | translate }}
+                    </button>
+                  }
+                  @if (rowUnapproveVisible()) {
+                    <button type="button" class="apple-btn apple-btn--dark" (click)="unapproveOne(row)">
+                      {{ 'ADMIN.UNAPPROVE' | translate }}
+                    </button>
+                  }
+                </div>
               </div>
-              <span class="apple-status-pill" [attr.aria-label]="'ADMIN.STATUS_PENDING_ARIA' | translate">
-                {{ 'ADMIN.STATUS_PENDING' | translate }}
-              </span>
-            </div>
-            <p class="apple-caption apple-text-on-dark-body">{{ story.preview }}</p>
-            <div class="d-flex flex-wrap" style="gap: 12px">
-              <button type="button" class="apple-btn apple-btn--primary" (click)="approve(story)">
-                {{ 'ADMIN.APPROVE' | translate }}
-              </button>
-              <button type="button" class="apple-btn apple-btn--dark" (click)="reject(story)">
-                {{ 'ADMIN.REJECT' | translate }}
-              </button>
             </div>
           </div>
         }

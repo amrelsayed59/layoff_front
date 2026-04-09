@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, DestroyRef, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +14,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { PublishedStory } from '../../data/story.models';
 import { StoriesApiService } from '../../core/stories-api.service';
 import { STORY_INDUSTRY_OPTIONS, STORY_REASON_OPTIONS } from '../submit-story/submit-story.component';
+import { DatePipe } from '@angular/common';
+import { ReportStoryDialogComponent } from '../../dialogs/report-story-dialog.component';
 
 /**
  * Public home: Apple-style hero + story tile grid (DESIGN.md).
@@ -21,11 +25,14 @@ import { STORY_INDUSTRY_OPTIONS, STORY_REASON_OPTIONS } from '../submit-story/su
   imports: [
     TranslatePipe,
     RouterLink,
+    MatDialogModule,
+    MatSnackBarModule,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     ReactiveFormsModule,
+    DatePipe,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -33,6 +40,9 @@ import { STORY_INDUSTRY_OPTIONS, STORY_REASON_OPTIONS } from '../submit-story/su
 export class HomeComponent implements OnInit, AfterViewInit {
   private readonly storiesApi = inject(StoriesApiService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
 
   protected readonly stories = signal<PublishedStory[]>([]);
   protected readonly loading = signal(false);
@@ -54,6 +64,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   private inFlight = false;
   private readonly requestSeq = signal(0);
 
+  @ViewChild('storiesSection') private readonly storiesSection?: ElementRef<HTMLElement>;
   @ViewChild('sentinel') private readonly sentinel?: ElementRef<HTMLElement>;
   private observer?: IntersectionObserver;
 
@@ -183,5 +194,50 @@ export class HomeComponent implements OnInit, AfterViewInit {
   initial(companyLabel: string): string {
     const t = companyLabel?.trim();
     return (t?.charAt(0) || '·').toUpperCase();
+  }
+
+  /**
+   * Smooth-scrolls to an in-page anchor by id, while keeping default browser behavior
+   * for new-tab / middle-click / modified clicks.
+   */
+  /**
+   * Opens the report dialog for a public story card.
+   */
+  protected openReport(story: PublishedStory): void {
+    this.dialog
+      .open(ReportStoryDialogComponent, {
+        width: 'min(440px, 92vw)',
+        autoFocus: 'dialog',
+        panelClass: 'apple-dialog-panel',
+        data: { storyId: story.id, title: story.companyLabel },
+      })
+      .afterClosed()
+      .subscribe((ok) => {
+        if (ok) {
+          this.snackBar.open(this.translate.instant('REPORT.TOAST_OK'), undefined, { duration: 3000 });
+        }
+      });
+  }
+
+  protected scrollToAnchor(event: MouseEvent, anchorId: string): void {
+    // Don't interfere with middle-click, right-click, or modifier-key navigation.
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const el = this.storiesSection?.nativeElement ?? document.getElementById(anchorId);
+    if (!el) return;
+
+    // Keep the URL hash in sync without triggering a hard navigation.
+    history.replaceState(null, '', `${location.pathname}${location.search}#${anchorId}`);
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }

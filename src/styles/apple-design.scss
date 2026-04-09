@@ -465,7 +465,8 @@
 
 .apple-tile-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  align-items: start;
   gap: 24px;
   margin-top: 40px;
 }
@@ -485,6 +486,7 @@
 .apple-tile {
   display: flex;
   flex-direction: column;
+  align-self: start;
   background-color: var(--apple-gray-light);
   border-radius: 8px;
   border: none;

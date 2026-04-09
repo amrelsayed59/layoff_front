@@ -1,0 +1,36 @@
+<h2 mat-dialog-title class="dialog-title apple-section-heading">
+  {{ 'REPORT.TITLE' | translate }}
+</h2>
+<mat-dialog-content class="dialog-body apple-stack-gap">
+  <p class="apple-caption">{{ data.title }}</p>
+  @if (errorKey()) {
+    <p class="apple-error-text" role="alert">{{ errorKey()! | translate }}</p>
+  }
+  <form [formGroup]="form" class="apple-stack-gap" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>{{ 'REPORT.REASON_LABEL' | translate }}</mat-label>
+      <mat-select formControlName="reason" required>
+        @for (opt of reasonOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.labelKey | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>{{ 'REPORT.MESSAGE_LABEL' | translate }}</mat-label>
+      <textarea matInput formControlName="message" rows="4" [placeholder]="'REPORT.MESSAGE_PLACEHOLDER' | translate"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button type="button" class="apple-link" (click)="cancel()" [disabled]="submitting()">
+    {{ 'DIALOG.CANCEL' | translate }}
+  </button>
+  <button
+    type="button"
+    class="apple-btn apple-btn--dark"
+    (click)="submit()"
+    [disabled]="submitting()"
+  >
+    {{ submitting() ? ('REPORT.SUBMITTING' | translate) : ('REPORT.SUBMIT' | translate) }}
+  </button>
+</mat-dialog-actions>

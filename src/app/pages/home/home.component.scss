@@ -134,3 +134,22 @@
     background-position: 220% 0%;
   }
 }
+
+
+.story-item {
+  background-color: white;
+  padding: 16px;
+  border-radius: 12px;
+  min-height: 300px;
+  .story-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    .story-info {
+      display: flex;
+      gap: 12px;
+
+    }
+  }
+}

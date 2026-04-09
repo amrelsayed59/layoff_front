@@ -10,11 +10,12 @@
       >
         {{ 'HOME.CTA_LEARN' | translate }}
       </a>
-      <a routerLink="/submit" class="apple-btn apple-btn--primary">{{ 'HOME.CTA_SUBMIT' | translate }}</a>
+      <a routerLink="/submit" class="apple-btn apple-btn--primary">{{
+        'HOME.CTA_SUBMIT' | translate
+      }}</a>
     </div>
   </div>
 </section>
-
 
 <section
   id="stories"
@@ -28,7 +29,11 @@
     <div class="home-controls apple-skin apple-stack-gap">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ 'HOME.SEARCH_LABEL' | translate }}</mat-label>
-        <input matInput [formControl]="search" [placeholder]="'HOME.SEARCH_PLACEHOLDER' | translate" />
+        <input
+          matInput
+          [formControl]="search"
+          [placeholder]="'HOME.SEARCH_PLACEHOLDER' | translate"
+        />
       </mat-form-field>
 
       <div class="row g-3">
@@ -100,9 +105,15 @@
         <div class="home-empty apple-card-elevated apple-stack-gap">
           <div class="home-empty__art" aria-hidden="true">
             <svg viewBox="0 0 240 120">
-              <path d="M30 92c14-18 44-34 74-34s60 16 74 34" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="10" stroke-linecap="round"/>
-              <circle cx="88" cy="50" r="10" fill="rgba(0,0,0,.18)"/>
-              <circle cx="152" cy="50" r="10" fill="rgba(0,0,0,.18)"/>
+              <path
+                d="M30 92c14-18 44-34 74-34s60 16 74 34"
+                fill="none"
+                stroke="rgba(0,0,0,.18)"
+                stroke-width="10"
+                stroke-linecap="round"
+              />
+              <circle cx="88" cy="50" r="10" fill="rgba(0,0,0,.18)" />
+              <circle cx="152" cy="50" r="10" fill="rgba(0,0,0,.18)" />
             </svg>
           </div>
           <div>
@@ -113,6 +124,61 @@
       }
       <div class="apple-tile-grid">
         @for (story of stories(); track story.id) {
+          <div class="story-item">
+            <div class="story-header">
+              <div class="story-info" aria-hidden="true">
+                <div class="apple-tile__media" aria-hidden="true">
+                  <span class="apple-tile__glyph">{{ initial(story.companyLabel) }}</span>
+                </div>
+                <div>
+                  <h3 class="apple-tile-heading">{{ story.companyLabel }}</h3>
+                  <div class="apple-tile__meta">
+                    <span class="apple-tile__meta-item">
+                      <mat-icon class="apple-meta-icon" fontSet="material-icons"
+                        >work_outline</mat-icon
+                      >
+                      {{ story.role }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="story-date">
+                <span class="apple-tile__meta-item">
+                  <mat-icon class="apple-meta-icon" fontSet="material-icons"
+                    >calendar_today</mat-icon
+                  >
+                  {{ story.date | date: 'MMM yyyy' }}
+                </span>
+              </div>
+            </div>
+            @if (story.tags && story.tags.length > 0) {
+              <div class="apple-tile__tags">
+                @for (tag of story.tags; track tag; let i = $index) {
+                  <span class="apple-tile__tag" [class.apple-tile__tag--accent]="i === 0">{{
+                    tag
+                  }}</span>
+                }
+              </div>
+            }
+
+            <p class="apple-caption" [class.home-story-preview--clamped]="!isExpanded(story.id)">
+              {{ isExpanded(story.id) ? story.fullText || story.preview : story.preview }}
+            </p>
+            <div class="apple-tile__actions">
+              <button type="button" class="apple-link" (click)="toggleStory(story.id)">
+                {{
+                  isExpanded(story.id)
+                    ? ('HOME.SHOW_LESS' | translate)
+                    : ('HOME.READ_MORE' | translate)
+                }}
+                <span class="apple-link__chevron" aria-hidden="true">›</span>
+              </button>
+              <button type="button" class="apple-link" (click)="openReport(story)">
+                {{ 'REPORT.BTN' | translate }}
+              </button>
+            </div>
+          </div>
+
           <article class="apple-tile">
             <div class="apple-tile__media" aria-hidden="true">
               <span class="apple-tile__glyph">{{ initial(story.companyLabel) }}</span>
@@ -126,7 +192,9 @@
                 </span>
                 @if (story.date) {
                   <span class="apple-tile__meta-item">
-                    <mat-icon class="apple-meta-icon" fontSet="material-icons">calendar_today</mat-icon>
+                    <mat-icon class="apple-meta-icon" fontSet="material-icons"
+                      >calendar_today</mat-icon
+                    >
                     {{ story.date | date: 'MMM yyyy' }}
                   </span>
                 }
@@ -134,16 +202,22 @@
               @if (story.tags && story.tags.length > 0) {
                 <div class="apple-tile__tags">
                   @for (tag of story.tags; track tag; let i = $index) {
-                    <span class="apple-tile__tag" [class.apple-tile__tag--accent]="i === 0">{{ tag }}</span>
+                    <span class="apple-tile__tag" [class.apple-tile__tag--accent]="i === 0">{{
+                      tag
+                    }}</span>
                   }
                 </div>
               }
               <p class="apple-caption" [class.home-story-preview--clamped]="!isExpanded(story.id)">
-                {{ isExpanded(story.id) ? (story.fullText || story.preview) : story.preview }}
+                {{ isExpanded(story.id) ? story.fullText || story.preview : story.preview }}
               </p>
               <div class="apple-tile__actions">
                 <button type="button" class="apple-link" (click)="toggleStory(story.id)">
-                  {{ isExpanded(story.id) ? ('HOME.SHOW_LESS' | translate) : ('HOME.READ_MORE' | translate) }}
+                  {{
+                    isExpanded(story.id)
+                      ? ('HOME.SHOW_LESS' | translate)
+                      : ('HOME.READ_MORE' | translate)
+                  }}
                   <span class="apple-link__chevron" aria-hidden="true">›</span>
                 </button>
                 <button type="button" class="apple-link" (click)="openReport(story)">
@@ -157,7 +231,8 @@
       <div class="home-load-more">
         @if (loadingMore()) {
           <div class="home-bottom-loader" aria-label="{{ 'HOME.LOADING_MORE' | translate }}">
-            <span class="home-dot"></span><span class="home-dot"></span><span class="home-dot"></span>
+            <span class="home-dot"></span><span class="home-dot"></span
+            ><span class="home-dot"></span>
           </div>
         }
         <div #sentinel class="home-sentinel" aria-hidden="true"></div>
@@ -165,4 +240,3 @@
     }
   </div>
 </section>
-

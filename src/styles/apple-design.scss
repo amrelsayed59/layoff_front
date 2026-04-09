@@ -465,7 +465,7 @@
 
 .apple-tile-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   align-items: start;
   gap: 24px;
   margin-top: 40px;
@@ -495,13 +495,14 @@
 }
 
 .apple-tile__media {
-  flex: 0 0 auto;
-  min-height: 200px;
-  aspect-ratio: 16 / 10;
-  background-color: #e8e8ed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    flex: 0 0 auto;
+    min-height: 80px;
+    aspect-ratio: 16 / 15;
+    background-color: #e8e8ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
 }
 
 .apple-tile__glyph {

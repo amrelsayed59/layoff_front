@@ -1,0 +1,43 @@
+<header class="apple-glass-nav">
+  <div class="apple-nav-inner">
+    <a routerLink="/" class="apple-nav-brand">{{ 'APP.TITLE' | translate }}</a>
+    <nav class="apple-nav-links" aria-label="Primary">
+      <a
+        routerLink="/"
+        routerLinkActive="apple-nav-link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="apple-nav-link"
+      >
+        {{ 'NAV.HOME' | translate }}
+      </a>
+      <a routerLink="/submit" routerLinkActive="apple-nav-link--active" class="apple-nav-link">
+        {{ 'NAV.SUBMIT' | translate }}
+      </a>
+      <a routerLink="/admin" routerLinkActive="apple-nav-link--active" class="apple-nav-link">
+        {{ 'NAV.ADMIN' | translate }}
+      </a>
+    </nav>
+    <div
+      class="apple-nav-util"
+      role="group"
+      [attr.aria-label]="'LANG.ARIA' | translate"
+    >
+      <button
+        type="button"
+        class="apple-lang-btn"
+        [class.apple-lang-btn--active]="i18n.currentLang() === 'en'"
+        (click)="i18n.setLanguage('en')"
+      >
+        {{ 'LANG.EN' | translate }}
+      </button>
+      <button
+        type="button"
+        class="apple-lang-btn"
+        [class.apple-lang-btn--active]="i18n.currentLang() === 'ar'"
+        (click)="i18n.setLanguage('ar')"
+      >
+        {{ 'LANG.AR' | translate }}
+      </button>
+    </div>
+  </div>
+</header>

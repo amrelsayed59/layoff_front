@@ -1,0 +1,156 @@
+<section class="apple-hero apple-hero--dark" aria-labelledby="hero-heading">
+  <div class="apple-container apple-hero__content">
+    <h1 id="hero-heading" class="apple-display-hero">{{ 'APP.TITLE' | translate }}</h1>
+    <p class="apple-hero__sub">{{ 'APP.SUBTITLE' | translate }}</p>
+    <div class="apple-hero__cta">
+      <a [routerLink]="['/']" fragment="stories" class="apple-pill apple-pill--on-dark">
+        {{ 'HOME.CTA_LEARN' | translate }}
+      </a>
+      <a routerLink="/submit" class="apple-btn apple-btn--primary">{{ 'HOME.CTA_SUBMIT' | translate }}</a>
+    </div>
+  </div>
+</section>
+
+<section id="stories" class="apple-section apple-section--light apple-section--padded-bottom">
+  <div class="apple-container">
+    <h2 class="apple-section-heading">{{ 'HOME.STORIES_SECTION_TITLE' | translate }}</h2>
+    <p class="apple-body">{{ 'HOME.LEAD' | translate }}</p>
+
+    <div class="home-controls apple-skin apple-stack-gap">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>{{ 'HOME.SEARCH_LABEL' | translate }}</mat-label>
+        <input matInput [formControl]="search" [placeholder]="'HOME.SEARCH_PLACEHOLDER' | translate" />
+      </mat-form-field>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-4">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'HOME.FILTER_INDUSTRY' | translate }}</mat-label>
+            <mat-select [formControl]="industry">
+              <mat-option value="">{{ 'HOME.ALL' | translate }}</mat-option>
+              @for (row of industries; track row.value) {
+                <mat-option [value]="row.value">{{ row.labelKey | translate }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-md-4">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'HOME.FILTER_REASON' | translate }}</mat-label>
+            <mat-select [formControl]="reason">
+              <mat-option value="">{{ 'HOME.ALL' | translate }}</mat-option>
+              @for (row of reasons; track row.value) {
+                <mat-option [value]="row.value">{{ row.labelKey | translate }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-md-4 d-flex align-items-stretch">
+          <button type="button" class="apple-btn apple-btn--dark w-100" (click)="clearFilters()">
+            {{ 'HOME.CLEAR_FILTERS' | translate }}
+          </button>
+        </div>
+      </div>
+      <div class="home-active-filters apple-caption">
+        @if (search.value || industry.value || reason.value) {
+          <span class="home-chip">{{ 'HOME.ACTIVE' | translate }}</span>
+          @if (search.value) {
+            <span class="home-chip">{{ 'HOME.SEARCH' | translate }}: “{{ search.value }}”</span>
+          }
+          @if (industry.value) {
+            <span class="home-chip">{{ 'HOME.INDUSTRY' | translate }}: {{ industry.value }}</span>
+          }
+          @if (reason.value) {
+            <span class="home-chip">{{ 'HOME.REASON' | translate }}: {{ reason.value }}</span>
+          }
+        }
+      </div>
+    </div>
+
+    @if (error()) {
+      <p class="apple-error-text" role="alert">{{ error() | translate }}</p>
+    }
+
+    @if (loading() && stories().length === 0) {
+      <div class="apple-tile-grid">
+        @for (i of [0, 1, 2, 3, 4, 5]; track i) {
+          <article class="apple-tile home-skeleton">
+            <div class="apple-tile__media" aria-hidden="true">
+              <span class="apple-tile__glyph home-skeleton__glyph"></span>
+            </div>
+            <div class="apple-tile__body">
+              <div class="home-skeleton__line home-skeleton__line--title"></div>
+              <div class="home-skeleton__line"></div>
+              <div class="home-skeleton__line home-skeleton__line--short"></div>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      @if (!loading() && stories().length === 0) {
+        <div class="home-empty apple-card-elevated apple-stack-gap">
+          <div class="home-empty__art" aria-hidden="true">
+            <svg viewBox="0 0 240 120">
+              <path d="M30 92c14-18 44-34 74-34s60 16 74 34" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="10" stroke-linecap="round"/>
+              <circle cx="88" cy="50" r="10" fill="rgba(0,0,0,.18)"/>
+              <circle cx="152" cy="50" r="10" fill="rgba(0,0,0,.18)"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="apple-tile-heading">{{ 'HOME.EMPTY_TITLE' | translate }}</h3>
+            <p class="apple-body">{{ 'HOME.EMPTY_LEAD' | translate }}</p>
+          </div>
+        </div>
+      }
+      <div class="apple-tile-grid">
+        @for (story of stories(); track story.id) {
+          <article class="apple-tile">
+            <div class="apple-tile__media" aria-hidden="true">
+              <span class="apple-tile__glyph">{{ initial(story.companyLabel) }}</span>
+            </div>
+            <div class="apple-tile__body">
+              <h3 class="apple-tile-heading">{{ story.companyLabel }}</h3>
+              <div class="apple-tile__meta">
+                <span class="apple-tile__meta-item">
+                  <mat-icon class="apple-meta-icon" fontSet="material-icons">work_outline</mat-icon>
+                  {{ story.role }}
+                </span>
+                @if (story.date) {
+                  <span class="apple-tile__meta-item">
+                    <mat-icon class="apple-meta-icon" fontSet="material-icons">calendar_today</mat-icon>
+                    {{ story.date }}
+                  </span>
+                }
+              </div>
+              @if (story.tags && story.tags.length > 0) {
+                <div class="apple-tile__tags">
+                  @for (tag of story.tags; track tag; let i = $index) {
+                    <span class="apple-tile__tag" [class.apple-tile__tag--accent]="i === 0">{{ tag }}</span>
+                  }
+                </div>
+              }
+              <p class="apple-caption">
+                {{ isExpanded(story.id) ? (story.fullText || story.preview) : story.preview }}
+              </p>
+              <div class="apple-tile__actions">
+                <button type="button" class="apple-link" (click)="toggleStory(story.id)">
+                  {{ isExpanded(story.id) ? ('HOME.SHOW_LESS' | translate) : ('HOME.READ_MORE' | translate) }}
+                  <span class="apple-link__chevron" aria-hidden="true">›</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+
+      <div class="home-load-more">
+        @if (loadingMore()) {
+          <div class="home-bottom-loader" aria-label="{{ 'HOME.LOADING_MORE' | translate }}">
+            <span class="home-dot"></span><span class="home-dot"></span><span class="home-dot"></span>
+          </div>
+        }
+        <div #sentinel class="home-sentinel" aria-hidden="true"></div>
+      </div>
+    }
+  </div>
+</section>

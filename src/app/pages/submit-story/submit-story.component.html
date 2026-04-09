@@ -1,0 +1,104 @@
+@if (submitted()) {
+  <section class="apple-section apple-section--light apple-section--valign">
+    <div class="apple-container">
+      <div class="apple-card-elevated apple-stack-gap">
+        <h2 class="apple-section-heading" style="margin-bottom: 0">{{ 'SUBMIT.THANKS_TITLE' | translate }}</h2>
+        <p class="apple-body">{{ 'SUBMIT.THANKS_LEAD' | translate }}</p>
+        <button type="button" class="apple-btn apple-btn--primary" (click)="resetForm()">
+          {{ 'SUBMIT.SUBMIT_ANOTHER' | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+} @else {
+  <section class="apple-section apple-section--light">
+    <div class="apple-container apple-form-panel apple-skin">
+      <h1 class="apple-section-heading">{{ 'SUBMIT.PAGE_TITLE' | translate }}</h1>
+      <p class="apple-body" style="margin-bottom: 32px">{{ 'SUBMIT.PAGE_LEAD' | translate }}</p>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="apple-stack-gap-lg">
+        @if (error()) {
+          <p class="apple-error-text" role="alert">{{ error() | translate }}</p>
+        }
+        <div>
+          <h2 class="app-section-title">{{ 'SUBMIT.SECTION_WORK' | translate }}</h2>
+          <div class="apple-stack-gap">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>{{ 'FORM.COMPANY' | translate }}</mat-label>
+              <input matInput formControlName="company" autocomplete="organization" />
+              <mat-hint>{{ 'SUBMIT.COMPANY_HINT' | translate }}</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>{{ 'FORM.ROLE' | translate }}</mat-label>
+              <input matInput formControlName="role" required autocomplete="organization-title" />
+              @if (form.controls.role.invalid && form.controls.role.touched) {
+                <mat-error>{{ 'SUBMIT.ERR_ROLE' | translate }}</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>{{ 'FORM.INDUSTRY' | translate }}</mat-label>
+              <mat-select formControlName="industry" required>
+                @for (row of industries; track row.value) {
+                  <mat-option [value]="row.value">{{ row.labelKey | translate }}</mat-option>
+                }
+              </mat-select>
+              @if (form.controls.industry.invalid && form.controls.industry.touched) {
+                <mat-error>{{ 'SUBMIT.ERR_INDUSTRY' | translate }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <hr class="apple-divider" />
+        <div>
+          <h2 class="app-section-title">{{ 'SUBMIT.SECTION_LAYOFF' | translate }}</h2>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'FORM.LAYOFF_DATE' | translate }}</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="layoffDate" required />
+                <mat-datepicker-toggle matIconSuffix [for]="picker" />
+                <mat-datepicker #picker />
+                @if (form.controls.layoffDate.invalid && form.controls.layoffDate.touched) {
+                  <mat-error>{{ 'SUBMIT.ERR_DATE' | translate }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-md-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'FORM.REASON' | translate }}</mat-label>
+                <mat-select formControlName="reason" required>
+                  @for (row of reasons; track row.value) {
+                    <mat-option [value]="row.value">{{ row.labelKey | translate }}</mat-option>
+                  }
+                </mat-select>
+                @if (form.controls.reason.invalid && form.controls.reason.touched) {
+                  <mat-error>{{ 'SUBMIT.ERR_REASON' | translate }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <hr class="apple-divider" />
+        <div>
+          <h2 class="app-section-title">{{ 'SUBMIT.SECTION_STORY' | translate }}</h2>
+          <div class="apple-stack-gap">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>{{ 'FORM.YOUR_STORY' | translate }}</mat-label>
+              <textarea matInput formControlName="story" rows="7" required></textarea>
+              @if (form.controls.story.hasError('required') && form.controls.story.touched) {
+                <mat-error>{{ 'SUBMIT.ERR_STORY_REQUIRED' | translate }}</mat-error>
+              } @else if (form.controls.story.hasError('minlength') && form.controls.story.touched) {
+                <mat-error>{{ 'SUBMIT.ERR_STORY_MIN' | translate }}</mat-error>
+              }
+            </mat-form-field>
+            <mat-checkbox formControlName="anonymous">{{ 'SUBMIT.ANONYMOUS' | translate }}</mat-checkbox>
+            <div>
+              <button type="submit" class="apple-btn apple-btn--primary" [disabled]="loading()">
+                {{ loading() ? ('SUBMIT.SUBMITTING' | translate) : ('SUBMIT.SUBMIT_BTN' | translate) }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+}

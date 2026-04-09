@@ -1,0 +1,124 @@
+{
+  "APP": {
+    "TITLE": "Layoff Egypt",
+    "SUBTITLE": "Real layoff stories from Egypt",
+    "FOOTER_TAGLINE": "Layoff Egypt – Real layoff stories from Egypt"
+  },
+  "NAV": {
+    "HOME": "Home",
+    "SUBMIT": "Submit Story",
+    "ADMIN": "Admin"
+  },
+  "LANG": {
+    "EN": "EN",
+    "AR": "AR",
+    "ARIA": "Language"
+  },
+  "HOME": {
+    "TITLE": "Stories",
+    "LEAD": "Real experiences shared by people in Egypt.",
+    "STORIES_SECTION_TITLE": "Stories",
+    "CTA_LEARN": "Explore stories",
+    "CTA_SUBMIT": "Submit your story",
+    "LOADING": "Loading stories…",
+    "LOADING_MORE": "Loading more…",
+    "ERR_LOAD": "Could not load stories. Please try again.",
+    "SEARCH_LABEL": "Search",
+    "SEARCH_PLACEHOLDER": "Company, role, or story…",
+    "FILTER_INDUSTRY": "Industry",
+    "FILTER_REASON": "Reason",
+    "ALL": "All",
+    "CLEAR_FILTERS": "Clear",
+    "ACTIVE": "Active filters",
+    "SEARCH": "Search",
+    "INDUSTRY": "Industry",
+    "REASON": "Reason",
+    "EMPTY_TITLE": "No stories found",
+    "EMPTY_LEAD": "Try clearing filters or searching with fewer keywords.",
+    "READ_MORE": "Read more",
+    "SHOW_LESS": "Show less"
+  },
+  "SUBMIT": {
+    "PAGE_TITLE": "Submit your story",
+    "PAGE_LEAD": "Share what happened. Fields marked * are required.",
+    "SECTION_WORK": "Work details",
+    "SECTION_LAYOFF": "Layoff details",
+    "SECTION_STORY": "Your story",
+    "COMPANY_HINT": "Optional — leave blank if you prefer not to name the employer.",
+    "ERR_ROLE": "Role is required.",
+    "ERR_INDUSTRY": "Please choose an industry.",
+    "ERR_DATE": "Please select a date.",
+    "ERR_REASON": "Please choose a reason category.",
+    "ERR_STORY_REQUIRED": "Please describe what happened.",
+    "ERR_STORY_MIN": "Please add a bit more detail (at least 20 characters).",
+    "ANONYMOUS": "Submit anonymously (hide company name if published)",
+    "SUBMIT_BTN": "Submit story",
+    "THANKS_TITLE": "Thank you",
+    "SUBMITTING": "Submitting…",
+    "THANKS_LEAD": "Your story has been submitted for review.",
+    "ERR_SUBMIT_FAILED": "Could not submit your story. Please try again.",
+    "SUBMIT_ANOTHER": "Submit another"
+  },
+  "FORM": {
+    "COMPANY": "Company",
+    "EMAIL": "Email",
+    "ROLE": "Role",
+    "INDUSTRY": "Industry",
+    "LAYOFF_DATE": "Layoff date",
+    "REASON": "Reason",
+    "YOUR_STORY": "Your story",
+    "PASSWORD": "Password"
+  },
+  "OPTIONS": {
+    "INDUSTRY": {
+      "TECHNOLOGY": "Technology",
+      "FINANCE": "Finance",
+      "HEALTHCARE": "Healthcare",
+      "RETAIL": "Retail",
+      "MANUFACTURING": "Manufacturing",
+      "EDUCATION": "Education",
+      "OTHER": "Other"
+    },
+    "REASON": {
+      "RESTRUCTURING": "Restructuring",
+      "PERFORMANCE": "Performance",
+      "COST_CUTTING": "Cost cutting",
+      "OFFICE_CLOSURE": "Office closure",
+      "MERGER": "Merger / acquisition",
+      "OTHER": "Other"
+    }
+  },
+  "ADMIN": {
+    "TITLE": "Admin",
+    "LEAD": "Pending stories awaiting review.",
+    "SIGN_OUT": "Sign out",
+    "EMPTY": "No pending submissions.",
+    "LOADING": "Loading…",
+    "ERR_LOAD": "Could not load pending stories. Please try again.",
+    "ERR_UPDATE": "Could not update the story status. Please try again.",
+    "STATUS_PENDING": "Pending",
+    "STATUS_PENDING_ARIA": "Status: pending",
+    "APPROVE": "Approve",
+    "REJECT": "Reject",
+    "DIALOG": {
+      "APPROVE_TITLE": "Approve submission",
+      "APPROVE_MESSAGE": "Approve the submission from {{company}}? This demo only removes it from the pending list.",
+      "REJECT_TITLE": "Reject submission",
+      "REJECT_MESSAGE": "Reject the submission from {{company}}? It will be removed from the pending list.",
+      "APPROVE_CONFIRM": "Approve",
+      "REJECT_CONFIRM": "Reject"
+    }
+  },
+  "ADMIN_ACCESS": {
+    "TITLE": "Admin Login",
+    "SUBTITLE": "Sign in to continue.",
+    "ENTER": "Sign in",
+    "LOGGING_IN": "Signing in…",
+    "ERR_EMAIL": "Please enter a valid email.",
+    "ERR_PASSWORD": "Password is required (min 6 characters).",
+    "ERR_LOGIN_FAILED": "Login failed. Please check your credentials."
+  },
+  "DIALOG": {
+    "CANCEL": "Cancel"
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "APP": {
+    "TITLE": "مصر والتسريح",
+    "SUBTITLE": "قصص تسريح حقيقية من مصر",
+    "FOOTER_TAGLINE": "مصر والتسريح – قصص تسريح حقيقية من مصر"
+  },
+  "NAV": {
+    "HOME": "الرئيسية",
+    "SUBMIT": "أرسل قصتك",
+    "ADMIN": "الإدارة"
+  },
+  "LANG": {
+    "EN": "EN",
+    "AR": "ع",
+    "ARIA": "اللغة"
+  },
+  "HOME": {
+    "TITLE": "القصص",
+    "LEAD": "تجارب حقيقية يشاركها ناس في مصر.",
+    "STORIES_SECTION_TITLE": "القصص",
+    "CTA_LEARN": "استكشف القصص",
+    "CTA_SUBMIT": "أرسل قصتك",
+    "LOADING": "جاري تحميل القصص…",
+    "LOADING_MORE": "جاري تحميل المزيد…",
+    "ERR_LOAD": "تعذر تحميل القصص. حاول مرة أخرى.",
+    "SEARCH_LABEL": "بحث",
+    "SEARCH_PLACEHOLDER": "الشركة أو الدور أو نص القصة…",
+    "FILTER_INDUSTRY": "القطاع",
+    "FILTER_REASON": "السبب",
+    "ALL": "الكل",
+    "CLEAR_FILTERS": "مسح",
+    "ACTIVE": "فلاتر مفعّلة",
+    "SEARCH": "بحث",
+    "INDUSTRY": "القطاع",
+    "REASON": "السبب",
+    "EMPTY_TITLE": "لا توجد قصص",
+    "EMPTY_LEAD": "جرّب مسح الفلاتر أو تقليل كلمات البحث.",
+    "READ_MORE": "اقرأ المزيد",
+    "SHOW_LESS": "عرض أقل"
+  },
+  "SUBMIT": {
+    "PAGE_TITLE": "شارك قصتك",
+    "PAGE_LEAD": "صف ما حدث. الحقول المعلّمة بـ * مطلوبة.",
+    "SECTION_WORK": "تفاصيل العمل",
+    "SECTION_LAYOFF": "تفاصيل التسريح",
+    "SECTION_STORY": "قصتك",
+    "COMPANY_HINT": "اختياري — اتركه فارغًا إن لم ترغب بذكر جهة العمل.",
+    "ERR_ROLE": "المسمى الوظيفي مطلوب.",
+    "ERR_INDUSTRY": "يرجى اختيار قطاع.",
+    "ERR_DATE": "يرجى اختيار تاريخ.",
+    "ERR_REASON": "يرجى اختيار تصنيف للسبب.",
+    "ERR_STORY_REQUIRED": "يرجى وصف ما حدث.",
+    "ERR_STORY_MIN": "أضف المزيد من التفاصيل (٢٠ حرفًا على الأقل).",
+    "ANONYMOUS": "إرسال بشكل مجهول (إخفاء اسم الشركة عند النشر)",
+    "SUBMIT_BTN": "إرسال القصة",
+    "THANKS_TITLE": "شكرًا لك",
+    "SUBMITTING": "جاري الإرسال…",
+    "THANKS_LEAD": "تم إرسال قصتك للمراجعة.",
+    "ERR_SUBMIT_FAILED": "تعذر إرسال قصتك. حاول مرة أخرى.",
+    "SUBMIT_ANOTHER": "إرسال قصة أخرى"
+  },
+  "FORM": {
+    "COMPANY": "الشركة",
+    "EMAIL": "البريد الإلكتروني",
+    "ROLE": "المسمى الوظيفي",
+    "INDUSTRY": "القطاع",
+    "LAYOFF_DATE": "تاريخ التسريح",
+    "REASON": "السبب",
+    "YOUR_STORY": "قصتك",
+    "PASSWORD": "كلمة المرور"
+  },
+  "OPTIONS": {
+    "INDUSTRY": {
+      "TECHNOLOGY": "تكنولوجيا",
+      "FINANCE": "مالية ومصرفية",
+      "HEALTHCARE": "رعاية صحية",
+      "RETAIL": "تجزئة",
+      "MANUFACTURING": "تصنيع",
+      "EDUCATION": "تعليم",
+      "OTHER": "أخرى"
+    },
+    "REASON": {
+      "RESTRUCTURING": "إعادة هيكلة",
+      "PERFORMANCE": "الأداء",
+      "COST_CUTTING": "تقليص تكاليف",
+      "OFFICE_CLOSURE": "إغلاق مكتب",
+      "MERGER": "دمج أو استحواذ",
+      "OTHER": "أخرى"
+    }
+  },
+  "ADMIN": {
+    "TITLE": "الإدارة",
+    "LEAD": "قصص قيد المراجعة.",
+    "SIGN_OUT": "تسجيل الخروج",
+    "EMPTY": "لا توجد طلبات قيد الانتظار.",
+    "LOADING": "جاري التحميل…",
+    "ERR_LOAD": "تعذر تحميل القصص قيد الانتظار. حاول مرة أخرى.",
+    "ERR_UPDATE": "تعذر تحديث حالة القصة. حاول مرة أخرى.",
+    "STATUS_PENDING": "قيد المراجعة",
+    "STATUS_PENDING_ARIA": "الحالة: قيد المراجعة",
+    "APPROVE": "قبول",
+    "REJECT": "رفض",
+    "DIALOG": {
+      "APPROVE_TITLE": "قبول الطلب",
+      "APPROVE_MESSAGE": "قبول الطلب من {{company}}؟ هذا العرض التوضيحي يزيله فقط من قائمة الانتظار.",
+      "REJECT_TITLE": "رفض الطلب",
+      "REJECT_MESSAGE": "رفض الطلب من {{company}}؟ سيتم إزالته من قائمة الانتظار.",
+      "APPROVE_CONFIRM": "قبول",
+      "REJECT_CONFIRM": "رفض"
+    }
+  },
+  "ADMIN_ACCESS": {
+    "TITLE": "تسجيل دخول الإدارة",
+    "SUBTITLE": "سجّل الدخول للمتابعة.",
+    "ENTER": "تسجيل الدخول",
+    "LOGGING_IN": "جاري تسجيل الدخول…",
+    "ERR_EMAIL": "يرجى إدخال بريد إلكتروني صحيح.",
+    "ERR_PASSWORD": "كلمة المرور مطلوبة (٦ أحرف على الأقل).",
+    "ERR_LOGIN_FAILED": "فشل تسجيل الدخول. تحقق من البيانات وحاول مرة أخرى."
+  },
+  "DIALOG": {
+    "CANCEL": "إلغاء"
+  }
+}

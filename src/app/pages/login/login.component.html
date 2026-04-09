@@ -1,0 +1,36 @@
+<section class="apple-section apple-section--light apple-section--valign">
+  <div class="apple-container">
+    <div class="apple-card-elevated apple-stack-gap">
+      <div>
+        <h1 class="apple-section-heading">{{ 'ADMIN_ACCESS.TITLE' | translate }}</h1>
+        <p class="apple-body">{{ 'ADMIN_ACCESS.SUBTITLE' | translate }}</p>
+      </div>
+      <div class="apple-skin apple-stack-gap">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>{{ 'FORM.EMAIL' | translate }}</mat-label>
+          <input matInput type="email" [formControl]="email" autocomplete="username" (keydown.enter)="submit()" />
+          @if (email.invalid && email.touched) {
+            <mat-error>{{ 'ADMIN_ACCESS.ERR_EMAIL' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>{{ 'FORM.PASSWORD' | translate }}</mat-label>
+          <input matInput type="password" [formControl]="password" autocomplete="current-password" (keydown.enter)="submit()" />
+          @if (password.invalid && password.touched) {
+            <mat-error>{{ 'ADMIN_ACCESS.ERR_PASSWORD' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        @if (error()) {
+          <p class="apple-error-text" role="alert">{{ error() }}</p>
+        }
+
+        <button type="button" class="apple-btn apple-btn--primary" (click)="submit()" [disabled]="loading()">
+          {{ loading() ? ('ADMIN_ACCESS.LOGGING_IN' | translate) : ('ADMIN_ACCESS.ENTER' | translate) }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+

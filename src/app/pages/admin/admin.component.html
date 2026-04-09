@@ -1,0 +1,47 @@
+<section class="apple-section apple-section--light">
+  <div class="apple-container apple-stack-gap-lg">
+    <div class="apple-row-between">
+      <div>
+        <h1 class="apple-section-heading">{{ 'ADMIN.TITLE' | translate }}</h1>
+        <p class="apple-body">{{ 'ADMIN.LEAD' | translate }}</p>
+      </div>
+      <button type="button" class="apple-btn apple-btn--dark" (click)="signOut()">
+        {{ 'ADMIN.SIGN_OUT' | translate }}
+      </button>
+    </div>
+    @if (error()) {
+      <p class="apple-error-text" role="alert">{{ error() }}</p>
+    }
+    @if (loading()) {
+      <p class="apple-caption">{{ 'ADMIN.LOADING' | translate }}</p>
+    }
+    @if (pending().length === 0) {
+      <p class="apple-caption">{{ 'ADMIN.EMPTY' | translate }}</p>
+    } @else {
+      <div class="apple-stack-gap-lg">
+        @for (story of pending(); track story.id) {
+          <div class="apple-card-dark apple-stack-gap">
+            <div class="apple-row-between" style="align-items: center">
+              <div>
+                <h2 class="apple-tile-heading apple-text-on-dark-title">{{ story.company }}</h2>
+                <p class="apple-caption apple-text-on-dark-muted" style="margin-top: 4px">{{ story.role }}</p>
+              </div>
+              <span class="apple-status-pill" [attr.aria-label]="'ADMIN.STATUS_PENDING_ARIA' | translate">
+                {{ 'ADMIN.STATUS_PENDING' | translate }}
+              </span>
+            </div>
+            <p class="apple-caption apple-text-on-dark-body">{{ story.preview }}</p>
+            <div class="d-flex flex-wrap" style="gap: 12px">
+              <button type="button" class="apple-btn apple-btn--primary" (click)="approve(story)">
+                {{ 'ADMIN.APPROVE' | translate }}
+              </button>
+              <button type="button" class="apple-btn apple-btn--dark" (click)="reject(story)">
+                {{ 'ADMIN.REJECT' | translate }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

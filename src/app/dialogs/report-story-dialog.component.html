@@ -1,8 +1,6 @@
-<h2 mat-dialog-title class="dialog-title apple-section-heading">
-  {{ 'REPORT.TITLE' | translate }}
-</h2>
-<mat-dialog-content class="dialog-body apple-stack-gap">
-  <p class="apple-caption">{{ data.title }}</p>
+<h2 mat-dialog-title>{{ 'REPORT.TITLE' | translate }}</h2>
+<mat-dialog-content class="apple-stack-gap">
+  <p class="dialog-story-ref">{{ data.title }}</p>
   @if (errorKey()) {
     <p class="apple-error-text" role="alert">{{ errorKey()! | translate }}</p>
   }
@@ -21,13 +19,13 @@
     </mat-form-field>
   </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end" class="dialog-actions">
-  <button type="button" class="apple-link" (click)="cancel()" [disabled]="submitting()">
+<mat-dialog-actions align="end">
+  <button type="button" class="apple-btn apple-btn--ghost" (click)="cancel()" [disabled]="submitting()">
     {{ 'DIALOG.CANCEL' | translate }}
   </button>
   <button
     type="button"
-    class="apple-btn apple-btn--dark"
+    class="apple-btn apple-btn--primary"
     (click)="submit()"
     [disabled]="submitting()"
   >

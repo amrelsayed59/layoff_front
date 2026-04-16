@@ -1,30 +1,5 @@
-.apple-meta-icon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  color: rgba(0, 0, 0, 0.48);
-}
-
 .w-100 {
   width: 100%;
-}
-
-.home-controls {
-  margin: 24px 0 18px;
-}
-
-.home-active-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.home-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.06);
 }
 
 .home-empty {
@@ -85,45 +60,100 @@
   }
 }
 
+/* Skeleton mirrors story-card chrome: white card + timeline rail + text lines */
 .home-skeleton {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: clamp(20px, 3vw, 26px) clamp(18px, 3vw, 24px);
+  background: var(--apple-white);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
   overflow: hidden;
 }
 
-.home-skeleton__glyph {
-  display: inline-block;
-  width: 44px;
-  height: 44px;
-  border-radius: 16px;
-  background: rgba(0, 0, 0, 0.06);
+.home-skeleton__timeline {
+  display: flex;
+  flex-shrink: 0;
+  gap: 12px;
+  align-items: flex-start;
+  padding-top: 4px;
+}
+
+.home-skeleton__rail {
+  width: 2px;
+  align-self: stretch;
+  min-height: 3.5rem;
+  border-radius: 1px;
+}
+
+.home-skeleton__time {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 2px;
+}
+
+.home-skeleton__chip {
+  height: 8px;
+  width: 22px;
+  border-radius: 4px;
+}
+
+.home-skeleton__chip--year {
+  height: 11px;
+  width: 30px;
+}
+
+.home-skeleton__main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .home-skeleton__line {
   height: 12px;
   border-radius: 8px;
   margin-top: 10px;
-  background: rgba(0, 0, 0, 0.06);
-}
-.home-skeleton__line--title {
-  height: 16px;
-  width: 70%;
-  margin-top: 2px;
-}
-.home-skeleton__line--short {
-  width: 55%;
 }
 
-.home-skeleton__glyph,
+.home-skeleton__line--title {
+  height: 17px;
+  width: 62%;
+  margin-top: 0;
+}
+
+.home-skeleton__line--role {
+  height: 11px;
+  width: 40%;
+  margin-top: 8px;
+}
+
+.home-skeleton__line--short {
+  width: 50%;
+}
+
+/* Shimmer applied to all skeleton parts */
+.home-skeleton__rail,
+.home-skeleton__chip,
 .home-skeleton__line {
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.05));
   background-size: 220% 100%;
   animation: homeShimmer 1.25s infinite;
 }
 
-.home-story-preview--clamped {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
+/* Stagger shimmer phase so cards don't pulse in lockstep */
+.home-skeleton:nth-child(2) .home-skeleton__rail,
+.home-skeleton:nth-child(2) .home-skeleton__chip,
+.home-skeleton:nth-child(2) .home-skeleton__line {
+  animation-delay: 0.15s;
+}
+
+.home-skeleton:nth-child(3) .home-skeleton__rail,
+.home-skeleton:nth-child(3) .home-skeleton__chip,
+.home-skeleton:nth-child(3) .home-skeleton__line {
+  animation-delay: 0.3s;
 }
 
 @keyframes homeShimmer {
@@ -132,24 +162,5 @@
   }
   100% {
     background-position: 220% 0%;
-  }
-}
-
-
-.story-item {
-  background-color: white;
-  padding: 16px;
-  border-radius: 12px;
-  min-height: 300px;
-  .story-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-
-    .story-info {
-      display: flex;
-      gap: 12px;
-
-    }
   }
 }

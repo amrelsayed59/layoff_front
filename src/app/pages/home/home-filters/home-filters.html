@@ -1,0 +1,116 @@
+<section
+  class="home-filters apple-card-flat"
+  role="search"
+  [attr.aria-label]="'HOME.FILTERS_REGION_ARIA' | translate"
+>
+  <div class="home-filters__block">
+    <label class="home-field" for="home-filter-search">
+      <span class="type-field-label home-field__label">{{ 'HOME.SEARCH_LABEL' | translate }}</span>
+      <input
+        id="home-filter-search"
+        type="search"
+        class="home-input"
+        [formControl]="search"
+        [placeholder]="'HOME.SEARCH_PLACEHOLDER' | translate"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="none"
+        spellcheck="false"
+        enterkeyhint="search"
+      />
+    </label>
+  </div>
+
+  <div class="home-filters__block home-filters__block--refine">
+    <p class="type-overline home-filters__refine-heading">{{ 'HOME.REFINE_HEADING' | translate }}</p>
+    <div class="home-filters__refine-grid">
+      <label class="home-field" for="home-filter-industry">
+        <span class="type-field-label home-field__label">{{ 'HOME.FILTER_INDUSTRY' | translate }}</span>
+        <select id="home-filter-industry" class="home-select" [formControl]="industry">
+          <option value="">{{ 'HOME.ALL' | translate }}</option>
+          @for (row of industries; track row.value) {
+            <option [value]="row.value">{{ row.labelKey | translate }}</option>
+          }
+        </select>
+      </label>
+      <label class="home-field" for="home-filter-reason">
+        <span class="type-field-label home-field__label">{{ 'HOME.FILTER_REASON' | translate }}</span>
+        <select id="home-filter-reason" class="home-select" [formControl]="reason">
+          <option value="">{{ 'HOME.ALL' | translate }}</option>
+          @for (row of reasons; track row.value) {
+            <option [value]="row.value">{{ row.labelKey | translate }}</option>
+          }
+        </select>
+      </label>
+    </div>
+  </div>
+
+  @if (search.value.trim() || industry.value || reason.value) {
+    <div class="home-filters__active">
+      <div class="home-filters__active-head">
+        <span class="type-overline home-filters__active-title">{{ 'HOME.ACTIVE' | translate }}</span>
+        <button
+          type="button"
+          class="home-filters__text-btn"
+          (click)="clearFilters()"
+        >
+          {{ 'HOME.CLEAR_FILTERS' | translate }}
+        </button>
+      </div>
+      <ul class="home-filters__chips" aria-live="polite">
+        @if (search.value.trim()) {
+          <li class="home-filter-chip">
+            <div class="home-filter-chip__main">
+              <span class="type-meta-label home-filter-chip__label">{{ 'HOME.SEARCH' | translate }}</span>
+              <span class="type-meta-strong home-filter-chip__value">“<span>{{ search.value.trim() }}</span>”</span>
+            </div>
+            <button
+              type="button"
+              class="home-filter-chip__remove"
+              (click)="clearSearchFilter()"
+              [attr.aria-label]="'HOME.REMOVE_SEARCH' | translate"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </li>
+        }
+        @if (industry.value && industryLabelKey()) {
+          <li class="home-filter-chip">
+            <div class="home-filter-chip__main">
+              <span class="type-meta-label home-filter-chip__label">{{ 'HOME.INDUSTRY' | translate }}</span>
+              <span class="type-meta-strong home-filter-chip__value">{{
+                industryLabelKey() | translate
+              }}</span>
+            </div>
+            <button
+              type="button"
+              class="home-filter-chip__remove"
+              (click)="clearIndustryFilter()"
+              [attr.aria-label]="'HOME.REMOVE_INDUSTRY' | translate"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </li>
+        }
+        @if (reason.value && reasonLabelKey()) {
+          <li class="home-filter-chip">
+            <div class="home-filter-chip__main">
+              <span class="type-meta-label home-filter-chip__label">{{ 'HOME.REASON' | translate }}</span>
+              <span class="type-meta-strong home-filter-chip__value">{{
+                reasonLabelKey() | translate
+              }}</span>
+            </div>
+            <button
+              type="button"
+              class="home-filter-chip__remove"
+              (click)="clearReasonFilter()"
+              [attr.aria-label]="'HOME.REMOVE_REASON' | translate"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</section>

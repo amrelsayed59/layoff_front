@@ -2,9 +2,16 @@
 @use '@angular/material' as mat;
 
 @use 'styles/apple-design';
+@use 'styles/type-system';
 
 html {
   height: 100%;
+  /* Locale-aware typography (TYPOGRAPHY.md); drives .type-* utilities + Material inheritance. */
+  --type-ui-font: var(--apple-font-text);
+  --type-ui-font-display: var(--apple-font-display);
+  --type-ui-lh-body: var(--type-lh-body-en);
+  --type-ui-lh-heading: var(--type-lh-title-en);
+  --type-ui-lh-caption: var(--type-lh-caption-en);
   @include mat.theme(
     (
       color: (
@@ -17,17 +24,30 @@ html {
   );
 }
 
+html[lang='ar'] {
+  --type-ui-font: var(--type-font-ar-body);
+  --type-ui-font-display: var(--type-font-ar-body);
+  --type-ui-lh-body: var(--type-lh-body-ar);
+  --type-ui-lh-heading: var(--type-lh-title-ar);
+  --type-ui-lh-caption: var(--type-lh-caption-ar);
+}
+
 body {
   color-scheme: light;
   background-color: #f5f5f7;
   color: #1d1d1f;
   margin: 0;
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: var(--type-ui-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
 }
 
+/* Arabic UI: match body stack when RTL (i18n sets lang + dir together). */
 [dir='rtl'] body {
-  font-family: 'Noto Sans Arabic', 'Segoe UI', sans-serif;
+  font-family: var(--type-ui-font);
 }
 
 /* Keep Material Icons readable in RTL/Arabic (ligature font). */
@@ -39,6 +59,43 @@ mat-icon,
   unicode-bidi: isolate;
   letter-spacing: normal;
   font-feature-settings: 'liga';
+}
+
+/*
+ * Angular Material MDC: inherit bilingual app font (Roboto theme is overridden for user-facing text).
+ * Excludes icon font above; form fields, dialogs, snackbars, lists, tabs, tables follow body/html stack.
+ */
+.mat-mdc-form-field,
+.mat-mdc-form-field .mat-mdc-input-element,
+.mat-mdc-form-field .mdc-text-field__input,
+.mat-mdc-form-field .mat-mdc-select-value,
+.mat-mdc-form-field .mat-mdc-floating-label,
+.mat-mdc-button-base,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-stroked-button,
+.mat-mdc-button,
+.mat-mdc-icon-button,
+.mat-mdc-select,
+.mat-mdc-select-panel,
+.mat-mdc-option,
+.mat-mdc-dialog-container,
+.mat-mdc-dialog-container .mat-mdc-dialog-surface,
+.mat-mdc-snack-bar-container,
+.mat-mdc-snack-bar-container .mdc-snackbar__label,
+.mat-mdc-card,
+.mat-mdc-slide-toggle,
+.mat-mdc-checkbox,
+.mat-mdc-radio-button,
+.mat-mdc-tab-group,
+.mat-mdc-tab,
+.mat-mdc-list-item,
+.mat-mdc-list-item .mdc-list-item__primary-text,
+.mat-mdc-menu-item,
+.mat-mdc-stepper,
+.mat-mdc-table,
+.mat-mdc-paginator {
+  font-family: inherit !important;
 }
 
 /* Legacy helpers — prefer apple-* classes for new UI */
@@ -55,7 +112,7 @@ mat-icon,
   line-height: 1.1;
   margin: 0 0 8px;
   color: #1d1d1f;
-  font-family: var(--apple-font-display, inherit);
+  font-family: var(--type-ui-font-display);
 }
 
 .app-section-title {
@@ -65,16 +122,22 @@ mat-icon,
   letter-spacing: 0.06em;
   color: rgba(0, 0, 0, 0.48);
   margin: 0 0 16px;
+  font-family: var(--type-ui-font);
+}
+
+html[lang='ar'] .app-section-title {
+  letter-spacing: 0.04em;
 }
 
 .app-page-lead {
   font-size: 17px;
-  line-height: 1.47;
+  line-height: var(--type-ui-lh-body);
   letter-spacing: -0.374px;
   color: rgba(0, 0, 0, 0.8);
   margin: 0;
   max-width: 65ch;
   text-align: start;
+  font-family: var(--type-ui-font);
 }
 
 /* Material cards: Apple static tiles — no hover lift */
@@ -89,7 +152,18 @@ mat-icon,
   transform: none;
 }
 
+/*
+ * Arabic language subtree.
+ * :lang(ar) matches elements with lang="ar" (or that inherit it from an ancestor).
+ * In practice this fires for the whole page when html[lang='ar'] is set, and for
+ * any individual element explicitly marked lang="ar".
+ *
+ * Uses --type-font-mixed so Cairo is the first choice in both AR and EN locale.
+ * letter-spacing: 0 is the correct value for Arabic connected script.
+ * Direction is NOT forced here — dir="auto" on individual elements handles
+ * mixed-script paragraphs correctly.
+ */
 :lang(ar) {
-  font-family: 'Cairo', sans-serif;
-  direction: rtl;
+  font-family: var(--type-font-mixed);
+  letter-spacing: 0;
 }

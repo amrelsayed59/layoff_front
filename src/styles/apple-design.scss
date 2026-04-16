@@ -43,6 +43,54 @@
   /* Typography stack — SF Pro on Apple via system fonts */
   --apple-font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --apple-font-text: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /*
+   * Bilingual UI (Arabic + English) — see TYPOGRAPHY.md.
+   * One Arabic stack for the whole app; weights 400/600 match Cairo + Noto loads in index.html.
+   */
+  --type-font-ar-body: 'Cairo', 'Noto Sans Arabic', 'Segoe UI', sans-serif;
+
+  /*
+   * Hybrid font stack for user-generated content (company names, roles, story text).
+   *
+   * WHY THIS EXISTS:
+   * In EN locale, --type-ui-font resolves to the SF Pro chain. On macOS, SF Pro
+   * has partial Arabic coverage, so the browser never falls through to Cairo —
+   * Arabic renders in SF Pro's Arabic glyphs (not Cairo). On Windows it renders
+   * in Tahoma. Neither is acceptable.
+   *
+   * WHY NOT var(--type-font-ar-body), var(--apple-font-text):
+   * --type-font-ar-body ends with the generic `sans-serif`. Browsers stop at the
+   * first generic family name, so the SF Pro entries after it are silently
+   * ignored. The stack must be defined explicitly.
+   *
+   * RESULT: Cairo handles both Arabic and Latin in mixed-content elements.
+   * Cairo's Latin is clean and consistent at body sizes. SF Pro is preserved for
+   * pure UI chrome (buttons, labels, overlines) via --type-ui-font.
+   */
+  --type-font-mixed:
+    'Cairo',
+    'Noto Sans Arabic',
+    'Segoe UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    'SF Pro Text',
+    'SF Pro Icons',
+    'Helvetica Neue',
+    Helvetica,
+    Arial,
+    sans-serif;
+  /* Line heights: Arabic needs slightly more leading than Latin at the same px size. */
+  --type-lh-body-en: 1.47;
+  --type-lh-body-ar: 1.62;
+  --type-lh-title-en: 1.15;
+  --type-lh-title-ar: 1.28;
+  --type-lh-caption-en: 1.33;
+  --type-lh-caption-ar: 1.45;
+  /* Spacing rhythm (rem); pair with margin-block for bilingual sections */
+  --type-space-section: 1.5rem;
+  --type-space-block: 1rem;
+  --type-space-tight: 0.5rem;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -50,9 +98,9 @@
 /* -------------------------------------------------------------------------- */
 
 .apple-page {
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 17px;
-  line-height: 1.47;
+  line-height: var(--type-ui-lh-body);
   letter-spacing: -0.374px;
   font-weight: 400;
   color: var(--apple-near-black);
@@ -78,42 +126,56 @@
 /* -------------------------------------------------------------------------- */
 
 .apple-display-hero {
-  font-family: var(--apple-font-display);
-  font-size: clamp(2rem, 5vw, 3.5rem); /* 32–56px */
+  font-family: var(--type-ui-font-display);
+  font-size: clamp(2rem, 4.5vw, 3rem); /* 32–48px: commanding but not a product launch */
   font-weight: 600;
-  line-height: 1.07;
+  line-height: 1.08;
   letter-spacing: -0.28px;
   margin: 0;
   color: var(--apple-white);
   text-align: center;
+  text-wrap: balance; /* prevents awkward single-word orphans on narrow viewports */
+}
+
+html[lang='ar'] .apple-display-hero {
+  letter-spacing: 0; /* Arabic connected script: no negative spacing */
+  line-height: 1.2; /* Arabic titles need more leading */
 }
 
 .apple-section-heading {
-  font-family: var(--apple-font-display);
+  font-family: var(--type-ui-font-display);
   font-size: clamp(1.75rem, 4vw, 2.5rem); /* 28–40px */
   font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: normal;
+  line-height: var(--type-ui-lh-heading);
+  letter-spacing: -0.02em;
   margin: 0 0 8px;
   color: var(--apple-near-black);
   text-align: start;
 }
 
+html[lang='ar'] .apple-section-heading {
+  letter-spacing: -0.01em;
+}
+
 .apple-tile-heading {
-  font-family: var(--apple-font-display);
+  font-family: var(--type-ui-font-display);
   font-size: 1.75rem; /* 28px */
   font-weight: 400;
-  line-height: 1.14;
+  line-height: var(--type-ui-lh-heading);
   letter-spacing: 0.196px;
   margin: 0 0 6px;
   color: var(--apple-near-black);
   text-align: start;
 }
 
+html[lang='ar'] .apple-tile-heading {
+  letter-spacing: 0.02em;
+}
+
 .apple-body {
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 17px;
-  line-height: 1.47;
+  line-height: var(--type-ui-lh-body);
   letter-spacing: -0.374px;
   font-weight: 400;
   color: var(--apple-text-secondary);
@@ -122,9 +184,9 @@
 }
 
 .apple-caption {
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 14px;
-  line-height: 1.29;
+  line-height: var(--type-ui-lh-caption);
   letter-spacing: -0.224px;
   font-weight: 400;
   color: var(--apple-text-secondary);
@@ -133,9 +195,9 @@
 }
 
 .apple-micro {
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 12px;
-  line-height: 1.33;
+  line-height: var(--type-ui-lh-caption);
   letter-spacing: -0.12px;
   color: var(--apple-text-tertiary);
 }
@@ -175,7 +237,7 @@
 
 .apple-nav-brand {
   justify-self: start;
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 17px;
   font-weight: 600;
   line-height: 1;
@@ -183,6 +245,10 @@
   color: var(--apple-white);
   text-decoration: none;
   white-space: nowrap;
+}
+
+html[lang='ar'] .apple-nav-brand {
+  letter-spacing: 0;
 }
 
 .apple-nav-brand:hover {
@@ -204,7 +270,7 @@
 }
 
 .apple-nav-link {
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 12px;
   font-weight: 400;
   line-height: 1;
@@ -231,7 +297,7 @@
 }
 
 .apple-lang-btn {
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 12px;
   font-weight: 400;
   line-height: 1;
@@ -267,28 +333,44 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: max(520px, calc(100vh - var(--apple-nav-height)));
-  padding-block: clamp(48px, 10vh, 88px);
+  /* Height is content-driven — no min-height viewport lock.
+     Asymmetric: top > bottom so content below feels closer. */
+  padding-block-start: clamp(48px, 7vw, 80px);
+  padding-block-end:   clamp(40px, 6vw, 64px);
   padding-inline: 0;
 }
 
 .apple-hero--dark {
   background-color: var(--apple-black);
+  /* Hairline at the base softens the black→gray edge without adding visual mass */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .apple-hero__content {
+  /* Align with the 700px story feed so title/CTAs share the same column */
+  max-width: 700px;
+  width: 100%;
+  margin-inline: auto;
   text-align: center;
 }
 
 .apple-hero__sub {
-  font-family: var(--apple-font-display);
-  font-size: clamp(1.125rem, 2.2vw, 1.3125rem); /* ~21px */
+  font-family: var(--type-ui-font);
+  font-size: 1.0625rem; /* 17px fixed — hierarchy via color, not competing size */
   font-weight: 400;
-  line-height: 1.19;
-  letter-spacing: 0.231px;
-  color: rgba(255, 255, 255, 0.88);
-  margin: 12px auto 0;
-  max-width: 38em;
+  /* Light text on dark needs +0.05 leading over normal body (Impeccable: typography.md) */
+  line-height: 1.55;
+  letter-spacing: -0.374px;
+  /* 0.75 over 0.7: still clearly secondary but more legible on black */
+  color: rgba(255, 255, 255, 0.75);
+  margin: 16px auto 0; /* shorthand keeps inline centering without a second margin rule */
+  max-width: 52ch;
+}
+
+html[lang='ar'] .apple-hero__sub {
+  letter-spacing: 0;
+  line-height: 1.68; /* AR body is 1.62 + 0.06 for dark-bg compensation */
+  max-width: 44ch;   /* Arabic glyphs are wider; tighten measure to match EN feel */
 }
 
 .apple-hero__cta {
@@ -296,8 +378,8 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 14px 20px;
-  margin-top: 28px;
+  gap: 12px 16px; /* 4pt scale: 12px row, 16px column */
+  margin-top: 32px; /* 4pt scale: deliberate gap from text block */
 }
 
 .apple-section {
@@ -323,10 +405,134 @@
   min-height: min(70vh, 640px);
 }
 
-/* Material dialog surface shape when opened with panelClass */
-.apple-dialog-panel .mat-mdc-dialog-container .mdc-dialog__surface {
-  border-radius: 8px;
+/* ── Apple Dialog System ──────────────────────────────────────────────────
+   Applied via panelClass: 'apple-dialog-panel' (set as default in app.config.ts).
+   Overrides Angular Material MDC dialog with the product design system.
+   All dialogs share these rules; individual dialogs add no chrome of their own.
+────────────────────────────────────────────────────────────────────────── */
+
+/*
+ * Backdrop — lighter than Material's default rgba(0,0,0,0.6).
+ * .cdk-overlay-dark-backdrop is used by MatDialog and MatBottomSheet only;
+ * menus, selects, and autocomplete panels use a transparent backdrop,
+ * so this override is safe to apply globally.
+ */
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.32);
 }
+
+/*
+ * CSS token overrides on the overlay pane (where panelClass lands).
+ * These cascade into Material's MDC dialog component.
+ * Belt-and-suspenders: also using direct selector overrides below because
+ * token names differ between Material patch versions.
+ */
+.apple-dialog-panel {
+  --mdc-dialog-container-shape: 12px;
+  --mdc-dialog-container-color: var(--apple-white);
+  --mat-dialog-container-shape: 12px;
+  /* Replace Material's heavy multi-layer shadow with a single calm lift */
+  --mat-dialog-container-elevation-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.10),
+    0 1px 4px  rgba(0, 0, 0, 0.06);
+}
+
+/* Surface — the visible white card */
+.apple-dialog-panel .mdc-dialog__surface {
+  border-radius: 12px !important; /* token may not propagate on all patch versions */
+  box-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.10),
+    0 1px 4px  rgba(0, 0, 0, 0.06) !important;
+  background: var(--apple-white);
+  overflow: hidden;
+}
+
+/*
+ * Title — replaces Material's large MDC heading.
+ * ::before creates a 24px top spacer in MDC; remove it and use padding instead.
+ */
+.apple-dialog-panel .mat-mdc-dialog-title {
+  /* Mixed stack: dialog titles often echo bilingual company / story names */
+  font-family: var(--type-font-mixed);
+  /* Fluid — mirrors type-heading-card's clamp approach */
+  font-size: clamp(1.125rem, 2.5vw, 1.25rem);
+  font-weight: 600;
+  line-height: var(--type-ui-lh-heading);
+  letter-spacing: -0.022em;
+  color: var(--apple-near-black);
+  padding: 24px 24px 0;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.apple-dialog-panel .mat-mdc-dialog-title::before {
+  display: none;
+  height: 0;
+}
+
+html[lang='ar'] .apple-dialog-panel .mat-mdc-dialog-title {
+  letter-spacing: 0;
+}
+
+/* Content — scrollable region for body text and forms */
+.apple-dialog-panel .mat-mdc-dialog-content {
+  font-family: var(--type-font-mixed);
+  font-size: 1.0625rem;
+  line-height: var(--type-ui-lh-body);
+  letter-spacing: -0.374px;
+  color: var(--apple-text-secondary);
+  padding: 12px 24px 8px; /* top-gap from title; 8px bottom breathes before actions divider */
+  margin: 0;
+  max-height: 60vh;
+}
+
+html[lang='ar'] .apple-dialog-panel .mat-mdc-dialog-content {
+  letter-spacing: 0;
+}
+
+/*
+ * Story reference line inside the report dialog.
+ * Shown below the title as a contextual subtitle (which story is being reported).
+ */
+.apple-dialog-panel .dialog-story-ref {
+  font-family: var(--type-font-mixed);
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.12px;
+  color: var(--apple-text-tertiary);
+  /* 12px gap mirrors company-to-role spacing inside story cards */
+  margin: 0 0 12px;
+}
+
+/*
+ * Actions bar — footer matches story card footer exactly:
+ * hairline divider (rgba 0,0,0,0.06), 16px top padding, inline 24px.
+ */
+.apple-dialog-panel .mat-mdc-dialog-actions {
+  /* Story card footer divider — the visual anchor linking dialogs to cards */
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 16px 24px 24px;
+  margin: 0;
+  min-height: auto;
+  gap: 12px;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* Confirm / submit buttons — 44px touch target matches story-card__footer-btn */
+.apple-dialog-panel .mat-mdc-dialog-actions .apple-btn {
+  font-size: 0.9375rem;
+  min-height: 44px;
+  padding-block: 7px;
+  line-height: normal;
+}
+
+/*
+ * Cancel uses apple-btn--ghost: no extra overrides needed here.
+ * The .apple-btn rule above (font-size 0.9375rem, min-height 44px) already applies.
+ * ghost colour tokens: --apple-text-secondary at rest → --apple-near-black on hover.
+ */
 
 .apple-text-on-dark-title {
   color: #ffffff !important;
@@ -348,7 +554,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 17px;
   font-weight: 400;
   line-height: 2.41;
@@ -395,11 +601,64 @@
   color: var(--apple-near-black);
 }
 
+/*
+ * Danger variant — destructive actions (reject, delete, report).
+ * Bordered, not filled: weight lives in the confirm dialog, not the trigger.
+ * Matches the visual language used in admin moderation actions.
+ */
+.apple-btn--danger {
+  background: transparent;
+  color: #b00020;
+  border-color: rgba(176, 0, 32, 0.28);
+}
+
+.apple-btn--danger:hover {
+  background: rgba(176, 0, 32, 0.05);
+  border-color: rgba(176, 0, 32, 0.48);
+}
+
+.apple-btn--danger:active {
+  background: rgba(176, 0, 32, 0.10);
+}
+
+.apple-btn--danger:disabled {
+  opacity: 0.4;
+}
+
+/*
+ * Ghost variant — subtle dismiss / secondary action.
+ * Same layout model as all other apple-btn variants (padding, radius, touch target).
+ * No fill, no border — pure text weight, reduced visual prominence.
+ * Use as the Cancel button alongside a filled primary or danger button.
+ */
+.apple-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--apple-text-secondary);
+}
+
+.apple-btn--ghost:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: transparent;
+  color: var(--apple-near-black);
+}
+
+.apple-btn--ghost:active {
+  background: rgba(0, 0, 0, 0.07);
+  border-color: transparent;
+}
+
+.apple-btn--ghost:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
 .apple-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 17px;
   font-weight: 400;
   line-height: 1.2;
@@ -434,7 +693,7 @@
 }
 
 .apple-link {
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 14px;
   line-height: 1.43;
   letter-spacing: -0.224px;
@@ -463,24 +722,13 @@
 /* Product / story tile grid */
 /* -------------------------------------------------------------------------- */
 
+/* Story feed: single-column, centered, reading-optimized (~700px) */
 .apple-tile-grid {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  align-items: start;
-  gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   margin-top: 40px;
-}
-
-@media (max-width: 1024px) {
-  .apple-tile-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .apple-tile-grid {
-    grid-template-columns: 1fr;
-  }
+  margin-inline: auto;
 }
 
 .apple-tile {
@@ -496,7 +744,7 @@
 
 .apple-tile__media {
     flex: 0 0 auto;
-    min-height: 80px;
+    // min-height: 80px;
     aspect-ratio: 16 / 15;
     background-color: #e8e8ed;
     display: flex;
@@ -506,7 +754,7 @@
 }
 
 .apple-tile__glyph {
-  font-family: var(--apple-font-display);
+  font-family: var(--type-ui-font-display);
   font-size: 4rem;
   font-weight: 600;
   line-height: 1;
@@ -664,22 +912,16 @@
 }
 
 .apple-footer__text {
-  font-family: var(--apple-font-text);
+  font-family: var(--type-ui-font);
   font-size: 12px;
-  line-height: 1.33;
+  line-height: var(--type-ui-lh-caption);
   letter-spacing: -0.12px;
   color: rgba(255, 255, 255, 0.56);
   text-align: center;
   margin: 0;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Dialog */
-/* -------------------------------------------------------------------------- */
-
-.apple-dialog-surface {
-  border-radius: 8px;
-}
+/* Dialog system → see "Apple Dialog System" block above */
 
 /* -------------------------------------------------------------------------- */
 /* Utilities */
@@ -720,13 +962,10 @@
   margin: 0;
 }
 
-/* RTL: keep hero centered; tiles start-aligned already use logical start */
+/*
+ * RTL: follow html locale stacks (Cairo-first for Arabic via --type-ui-*).
+ * Do not hardcode a different Arabic family here — it would override TYPOGRAPHY.md.
+ */
 [dir='rtl'] .apple-page {
-  font-family: 'Noto Sans Arabic', var(--apple-font-text);
-}
-
-[dir='rtl'] .apple-display-hero,
-[dir='rtl'] .apple-section-heading,
-[dir='rtl'] .apple-tile-heading {
-  font-family: 'Noto Sans Arabic', var(--apple-font-display);
+  font-family: var(--type-ui-font);
 }

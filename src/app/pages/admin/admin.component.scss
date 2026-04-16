@@ -1,1 +1,366 @@
-/* Layout uses apple-* utilities from global stylesheet */
+/**
+ * Admin moderation inbox.
+ * Light surface, compact actions — a tool inside a storytelling product, not a dashboard.
+ * All spacing from the 4pt scale (4/8/12/16/24/32/48px). Surfaces match story card chrome.
+ */
+
+/* ── Content container ───────────────────────────────────────────────────── */
+
+/* Aligns with the 700px story feed so the page feels like one product */
+.admin-content {
+  max-width: 700px;
+  margin-inline: auto;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+/* Sign out: utility action — quiet, not a CTA */
+.admin-signout {
+  font-family: var(--type-ui-font);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.43;
+  color: var(--apple-text-tertiary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.admin-signout:hover {
+  color: var(--apple-text-secondary);
+  text-decoration: underline;
+}
+
+.admin-signout:focus-visible {
+  outline: 2px solid var(--apple-focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────────────── */
+
+/* Remove Material chrome; use a clean underline-only tab strip */
+.admin-tabs {
+  margin-bottom: 0;
+}
+
+/* ::ng-deep scoped to .admin-tabs — only penetrates this component's tabs */
+.admin-tabs ::ng-deep {
+  /* Strip the default header background / box-shadow */
+  .mat-mdc-tab-header {
+    --mat-tab-header-active-label-text-color: var(--apple-near-black);
+    --mat-tab-header-inactive-label-text-color: var(--apple-text-tertiary);
+    --mat-tab-header-active-indicator-color: var(--apple-near-black);
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .mat-mdc-tab {
+    font-family: var(--type-ui-font);
+    font-size: 0.875rem; /* 14px — compact for a tool */
+    font-weight: 400;
+    letter-spacing: normal;
+    min-width: auto;
+    padding-inline: 16px;
+    height: 40px;
+    opacity: 1;
+  }
+
+  .mat-mdc-tab.mdc-tab--active {
+    font-weight: 500;
+  }
+
+  /* Indicator: near-black, 2px, matches the design system's focus ring weight */
+  .mdc-tab-indicator__content--underline {
+    border-color: var(--apple-near-black) !important;
+    border-top-width: 2px;
+  }
+
+  /* No Material ripple — not this product's interaction language */
+  .mat-ripple-element {
+    display: none;
+  }
+}
+
+/* ── Toolbar ─────────────────────────────────────────────────────────────── */
+
+/* Same white card surface as story rows — keeps the eye level */
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--apple-white);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  margin-block: 24px;
+}
+
+.admin-toolbar__selection {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.admin-toolbar__count {
+  color: var(--apple-text-tertiary);
+}
+
+/* "Clear" link — same quiet weight as sign out */
+.admin-toolbar__clear {
+  font-family: var(--type-ui-font);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--apple-link);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.15s ease;
+}
+
+.admin-toolbar__clear:hover {
+  text-decoration: underline;
+}
+
+.admin-toolbar__clear:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+.admin-toolbar__clear:focus-visible {
+  outline: 2px solid var(--apple-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.admin-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Toolbar buttons: compact variant — deliberate scoped override */
+.admin-toolbar .apple-btn {
+  font-size: 0.875rem;
+  min-height: 36px;
+  padding-block: 6px;
+  line-height: normal;
+}
+
+/* ── Loading / Empty state ───────────────────────────────────────────────── */
+
+.admin-state-msg {
+  padding-block: 32px;
+  text-align: center;
+  color: var(--apple-text-tertiary);
+}
+
+/* ── Row list ────────────────────────────────────────────────────────────── */
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* tighter than story cards (20px) — list context not editorial */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* Story card surface: identical chrome to public story cards */
+.admin-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: clamp(16px, 2.5vw, 20px);
+  background: var(--apple-white);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  transition: border-color 0.15s ease;
+}
+
+.admin-row:hover {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Checkbox sits at the logical start; padding-top aligns it optically with the first text line */
+.admin-row__check {
+  flex-shrink: 0;
+  padding-top: 3px;
+}
+
+.admin-row__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Company + role block alongside status pill */
+.admin-row__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-row__meta {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.admin-row__company {
+  margin: 0 0 4px;
+}
+
+.admin-row__role {
+  margin: 0;
+}
+
+.admin-row__preview {
+  margin: 0;
+  color: var(--apple-text-secondary); /* slightly stronger than tertiary — still readable preview */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.admin-row__report-count {
+  margin: 0;
+  color: #b00020;
+}
+
+/* ── Status pill — light surface variants ────────────────────────────────── */
+
+.admin-status {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-family: var(--type-ui-font);
+  font-size: 0.6875rem; /* 11px */
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 980px;
+  white-space: nowrap;
+  /* Default: pending — neutral */
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--apple-text-secondary);
+}
+
+.admin-status--approved {
+  background: rgba(0, 113, 227, 0.08);
+  color: var(--apple-blue);
+}
+
+.admin-status--rejected {
+  background: rgba(176, 0, 32, 0.07);
+  color: #b00020;
+}
+
+/* ── Per-row action links ─────────────────────────────────────────────────── */
+
+/* Separated from row body by a hairline — matches story card footer */
+.admin-row__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  margin-top: 4px;
+}
+
+/* Compact link-style triggers: weight lives in the confirm dialog, not here */
+.admin-action {
+  font-family: var(--type-ui-font);
+  font-size: 0.875rem; /* 14px */
+  font-weight: 400;
+  line-height: 1.43;
+  letter-spacing: -0.12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px 8px 0;
+  min-height: 44px;
+  box-sizing: border-box;
+  transition: color 0.15s ease;
+}
+
+/* Pipe separator between actions using logical border */
+.admin-action + .admin-action {
+  padding-inline: 12px;
+  border-inline-start: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.admin-action:focus-visible {
+  outline: 2px solid var(--apple-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.admin-action--approve {
+  color: var(--apple-link);
+}
+
+.admin-action--approve:hover {
+  text-decoration: underline;
+}
+
+/* Reject: tertiary at rest — only gains danger color on hover (less alarming at a glance) */
+.admin-action--reject {
+  color: var(--apple-text-tertiary);
+}
+
+.admin-action--reject:hover {
+  color: #b00020;
+  text-decoration: underline;
+}
+
+/* ── RTL ─────────────────────────────────────────────────────────────────── */
+
+/* Logical properties handle most RTL automatically.
+   These rules fix the few cases where padding direction matters explicitly. */
+:host-context([dir='rtl']) .admin-action {
+  padding: 8px 0 8px 12px;
+}
+
+:host-context([dir='rtl']) .admin-action + .admin-action {
+  padding-inline: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-row,
+  .admin-signout,
+  .admin-toolbar__clear,
+  .admin-action {
+    transition: none;
+  }
+}

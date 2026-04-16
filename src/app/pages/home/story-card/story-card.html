@@ -1,0 +1,60 @@
+<article
+  class="story-card"
+  [class.story-card--no-date]="!story.date"
+  [attr.aria-labelledby]="'story-' + story.id + '-title'"
+>
+  @if (story.date) {
+    <div class="story-card__timeline">
+      <span class="story-card__timeline-rail" aria-hidden="true"></span>
+      <time class="story-card__time" [attr.datetime]="story.date" dir="ltr">
+        <span class="type-meta-label story-card__time-month">{{ story.date | date: 'MMM' }}</span>
+        <span class="type-meta-strong story-card__time-year">{{ story.date | date: 'yyyy' }}</span>
+      </time>
+    </div>
+  }
+
+  <div class="story-card__main">
+    <header class="story-card__header">
+      <h3 class="type-heading-card story-card__company" [id]="'story-' + story.id + '-title'">
+        {{ story.companyLabel }}
+      </h3>
+      <p class="type-secondary story-card__role">{{ story.role }}</p>
+    </header>
+
+    <p
+      class="type-story story-card__text"
+      [id]="'story-' + story.id + '-body'"
+      [class.story-card__text--clamped]="!expanded"
+    >
+      {{ expanded ? story.fullText || story.preview : story.preview }}
+    </p>
+
+    @if (story.tags && story.tags.length > 0) {
+      <ul class="story-card__tags">
+        @for (tag of story.tags; track tag) {
+          <li class="type-meta story-card__tag">{{ tag }}</li>
+        }
+      </ul>
+    }
+
+    <footer class="story-card__footer">
+      <button
+        type="button"
+        class="apple-link type-button story-card__footer-btn"
+        (click)="emitToggle()"
+        [attr.aria-expanded]="expanded"
+        [attr.aria-controls]="'story-' + story.id + '-body'"
+      >
+        {{ expanded ? ('HOME.SHOW_LESS' | translate) : ('HOME.READ_MORE' | translate) }}
+        <span class="apple-link__chevron" aria-hidden="true">›</span>
+      </button>
+      <button
+        type="button"
+        class="apple-link type-button story-card__footer-btn story-card__footer-btn--quiet"
+        (click)="emitReport()"
+      >
+        {{ 'REPORT.BTN' | translate }}
+      </button>
+    </footer>
+  </div>
+</article>

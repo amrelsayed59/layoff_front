@@ -1,20 +1,13 @@
-import { AfterViewInit, Component, DestroyRef, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
 import type { PublishedStory } from '../../data/story.models';
 import { StoriesApiService } from '../../core/stories-api.service';
-import { STORY_INDUSTRY_OPTIONS, STORY_REASON_OPTIONS } from '../submit-story/submit-story.component';
-import { DatePipe } from '@angular/common';
+import { HomeFiltersComponent } from './home-filters/home-filters';
+import { StoryCardComponent } from './story-card/story-card';
+import type { StoryBrowseFilters } from './story-browse-filters.model';
 import { ReportStoryDialogComponent } from '../../dialogs/report-story-dialog.component';
 
 /**
@@ -27,19 +20,14 @@ import { ReportStoryDialogComponent } from '../../dialogs/report-story-dialog.co
     RouterLink,
     MatDialogModule,
     MatSnackBarModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    DatePipe,
+    HomeFiltersComponent,
+    StoryCardComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements AfterViewInit {
   private readonly storiesApi = inject(StoriesApiService);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly translate = inject(TranslateService);
@@ -52,12 +40,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   protected expandedStories = new Set<string>();
 
-  protected readonly search = new FormControl('', { nonNullable: true });
-  protected readonly industry = new FormControl<string>('', { nonNullable: true });
-  protected readonly reason = new FormControl<string>('', { nonNullable: true });
-
-  protected readonly industries = STORY_INDUSTRY_OPTIONS;
-  protected readonly reasons = STORY_REASON_OPTIONS;
+  /** Latest filter payload from {@link HomeFiltersComponent}; drives API queries. */
+  private browseFilters: StoryBrowseFilters = { search: '', industry: '', reason: '' };
 
   private page = 1;
   private readonly limit = 10;
@@ -68,30 +52,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('sentinel') private readonly sentinel?: ElementRef<HTMLElement>;
   private observer?: IntersectionObserver;
 
-  ngOnInit(): void {
-    this.search.valueChanges
-      .pipe(debounceTime(400), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.resetAndLoad());
-
-    this.industry.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.resetAndLoad());
-    this.reason.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.resetAndLoad());
-
+  /**
+   * Handles filter updates from the home filters component (initial + every change).
+   */
+  protected onStoryFiltersChange(filters: StoryBrowseFilters): void {
+    this.browseFilters = filters;
     this.resetAndLoad();
   }
 
   ngAfterViewInit(): void {
     // Observer wiring only (no state writes here) to avoid ExpressionChangedAfterItHasBeenCheckedError.
     this.setupInfiniteScroll();
-  }
-
-  /**
-   * Clears filters/search and reloads the first page.
-   */
-  protected clearFilters(): void {
-    this.search.setValue('');
-    this.industry.setValue('');
-    this.reason.setValue('');
-    this.resetAndLoad();
   }
 
   /**
@@ -125,9 +96,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (opts.append) this.loadingMore.set(true);
     else this.loading.set(true);
 
-    const search = this.search.value.trim();
-    const industry = this.industry.value.trim();
-    const reason = this.reason.value.trim();
+    const search = this.browseFilters.search;
+    const industry = this.browseFilters.industry;
+    const reason = this.browseFilters.reason;
 
     this.storiesApi
       .getApproved({
@@ -190,25 +161,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return this.expandedStories.has(id);
   }
 
-  /** First character for the tile monogram (DESIGN.md product tile). */
-  initial(companyLabel: string): string {
-    const t = companyLabel?.trim();
-    return (t?.charAt(0) || '·').toUpperCase();
-  }
-
-  /**
-   * Smooth-scrolls to an in-page anchor by id, while keeping default browser behavior
-   * for new-tab / middle-click / modified clicks.
-   */
   /**
    * Opens the report dialog for a public story card.
    */
   protected openReport(story: PublishedStory): void {
     this.dialog
       .open(ReportStoryDialogComponent, {
-        width: 'min(440px, 92vw)',
-        autoFocus: 'dialog',
-        panelClass: 'apple-dialog-panel',
+        // width / panelClass / autoFocus come from MAT_DIALOG_DEFAULT_OPTIONS
         data: { storyId: story.id, title: story.companyLabel },
       })
       .afterClosed()

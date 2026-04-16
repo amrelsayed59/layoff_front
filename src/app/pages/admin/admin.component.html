@@ -1,35 +1,39 @@
 <section class="apple-section apple-section--light">
-  <div class="apple-container apple-stack-gap-lg">
-    <div class="apple-row-between">
-      <div>
-        <h1 class="apple-section-heading">{{ 'ADMIN.TITLE' | translate }}</h1>
-        <p class="apple-body">{{ 'ADMIN.LEAD' | translate }}</p>
-      </div>
-      <button type="button" class="apple-btn apple-btn--dark" (click)="signOut()">
-        {{ 'ADMIN.SIGN_OUT' | translate }}
-      </button>
-    </div>
+  <div class="apple-container">
+    <div class="admin-content">
 
-    @if (error()) {
-      <p class="apple-error-text" role="alert">{{ error() }}</p>
-    }
+      <!-- ── Header ─────────────────────────────────────────────────────── -->
+      <header class="admin-header">
+        <div>
+          <h1 class="apple-section-heading">{{ 'ADMIN.TITLE' | translate }}</h1>
+          <p class="apple-body">{{ 'ADMIN.LEAD' | translate }}</p>
+        </div>
+        <button type="button" class="admin-signout" (click)="signOut()">
+          {{ 'ADMIN.SIGN_OUT' | translate }}
+        </button>
+      </header>
 
-    <mat-tab-group
-      class="admin-tabs"
-      [selectedIndex]="tabIndex()"
-      (selectedIndexChange)="onTabChange($event)"
-      animationDuration="200ms"
-    >
-      @for (tab of inboxTabs; track tab.view) {
-        <mat-tab>
-          <ng-template mat-tab-label>{{ tab.labelKey | translate }}</ng-template>
-        </mat-tab>
+      @if (error()) {
+        <p class="apple-error-text" role="alert">{{ error() }}</p>
       }
-    </mat-tab-group>
 
-    <div class="admin-toolbar apple-card-dark apple-stack-gap" style="padding: 16px 20px">
-      <div class="apple-row-between" style="align-items: center; flex-wrap: wrap; gap: 12px">
-        <div class="d-flex flex-wrap" style="gap: 12px; align-items: center">
+      <!-- ── Tabs ───────────────────────────────────────────────────────── -->
+      <mat-tab-group
+        class="admin-tabs"
+        [selectedIndex]="tabIndex()"
+        (selectedIndexChange)="onTabChange($event)"
+        animationDuration="200ms"
+      >
+        @for (tab of inboxTabs; track tab.view) {
+          <mat-tab>
+            <ng-template mat-tab-label>{{ tab.labelKey | translate }}</ng-template>
+          </mat-tab>
+        }
+      </mat-tab-group>
+
+      <!-- ── Toolbar ────────────────────────────────────────────────────── -->
+      <div class="admin-toolbar">
+        <div class="admin-toolbar__selection">
           <mat-checkbox
             [checked]="allSelected()"
             [disabled]="rows().length === 0 || loading()"
@@ -39,21 +43,23 @@
           </mat-checkbox>
           <button
             type="button"
-            class="apple-link"
+            class="admin-toolbar__clear"
             [disabled]="selectedCount() === 0"
             (click)="clearSelection()"
           >
             {{ 'ADMIN.CLEAR_SELECTION' | translate }}
           </button>
-          <span class="apple-caption apple-text-on-dark-muted">
-            {{ 'ADMIN.SELECTED_COUNT' | translate: { count: selectedCount() } }}
-          </span>
+          @if (selectedCount() > 0) {
+            <span class="type-meta admin-toolbar__count">
+              {{ 'ADMIN.SELECTED_COUNT' | translate: { count: selectedCount() } }}
+            </span>
+          }
         </div>
-        <div class="d-flex flex-wrap" style="gap: 10px">
+        <div class="admin-toolbar__actions">
           @if (bulkApproveVisible()) {
             <button
               type="button"
-              class="apple-btn apple-btn--primary"
+              class="apple-btn apple-btn--primary admin-toolbar__btn"
               [disabled]="selectedCount() === 0 || loading()"
               (click)="bulk('approve')"
             >
@@ -63,7 +69,7 @@
           @if (bulkRejectVisible()) {
             <button
               type="button"
-              class="apple-btn apple-btn--dark"
+              class="apple-btn apple-btn--danger admin-toolbar__btn"
               [disabled]="selectedCount() === 0 || loading()"
               (click)="bulk('reject')"
             >
@@ -73,7 +79,7 @@
           @if (bulkUnapproveVisible()) {
             <button
               type="button"
-              class="apple-btn apple-btn--dark"
+              class="apple-btn apple-btn--danger admin-toolbar__btn"
               [disabled]="selectedCount() === 0 || loading()"
               (click)="bulk('unapprove')"
             >
@@ -82,64 +88,94 @@
           }
         </div>
       </div>
-    </div>
 
-    @if (loading()) {
-      <p class="apple-caption">{{ 'ADMIN.LOADING' | translate }}</p>
-    }
+      <!-- ── Loading / Empty ────────────────────────────────────────────── -->
+      @if (loading()) {
+        <p class="type-secondary admin-state-msg">{{ 'ADMIN.LOADING' | translate }}</p>
+      }
 
-    @if (!loading() && rows().length === 0) {
-      <p class="apple-caption">{{ 'ADMIN.EMPTY_TAB' | translate }}</p>
-    }
+      @if (!loading() && rows().length === 0) {
+        <p class="type-secondary admin-state-msg">{{ 'ADMIN.EMPTY_TAB' | translate }}</p>
+      }
 
-    @if (!loading() && rows().length > 0) {
-      <div class="apple-stack-gap-lg">
-        @for (row of rows(); track row.id) {
-          <div class="apple-card-dark apple-stack-gap">
-            <div class="apple-row-between" style="align-items: flex-start; gap: 12px">
+      <!-- ── Row list ───────────────────────────────────────────────────── -->
+      @if (!loading() && rows().length > 0) {
+        <ul class="admin-list">
+          @for (row of rows(); track row.id) {
+            <li class="admin-row">
               <mat-checkbox
+                class="admin-row__check"
                 [checked]="isSelected(row.id)"
                 [disabled]="loading()"
                 (change)="toggleRow(row.id, $event.checked)"
               />
-              <div style="flex: 1; min-width: 0">
-                <div class="apple-row-between" style="align-items: center; gap: 8px">
-                  <div>
-                    <h2 class="apple-tile-heading apple-text-on-dark-title">{{ row.companyLabel }}</h2>
-                    <p class="apple-caption apple-text-on-dark-muted" style="margin-top: 4px">{{ row.role }}</p>
+              <div class="admin-row__body">
+
+                <!-- Company + role + status pill -->
+                <div class="admin-row__head">
+                  <div class="admin-row__meta">
+                    <h2 class="type-heading-card admin-row__company">
+                      {{ row.companyLabel }}
+                    </h2>
+                    <p class="type-secondary admin-row__role">{{ row.role }}</p>
                   </div>
-                  <span class="apple-status-pill" [attr.aria-label]="statusAriaKey(row) | translate">
+                  <span
+                    class="admin-status"
+                    [class.admin-status--approved]="row.status === 'approved'"
+                    [class.admin-status--rejected]="row.status === 'rejected'"
+                    [attr.aria-label]="statusAriaKey(row) | translate"
+                  >
                     {{ statusLabelKey(row) | translate }}
                   </span>
                 </div>
+
+                <!-- Report count (reported queue only) -->
                 @if (currentView() === 'reported' && reportCount(row) > 0) {
-                  <p class="apple-caption apple-text-on-dark-muted" style="margin-top: 8px">
+                  <p class="type-meta admin-row__report-count">
                     {{ 'ADMIN.REPORTS_COUNT' | translate: { count: reportCount(row) } }}
                   </p>
                 }
-                <p class="apple-caption apple-text-on-dark-body" style="margin-top: 8px">{{ row.preview }}</p>
-                <div class="d-flex flex-wrap" style="gap: 12px; margin-top: 8px">
+
+                <!-- Story preview -->
+                <p class="type-meta admin-row__preview">{{ row.preview }}</p>
+
+                <!-- Per-row actions -->
+                <footer class="admin-row__footer">
                   @if (rowApproveVisible()) {
-                    <button type="button" class="apple-btn apple-btn--primary" (click)="approveOne(row)">
+                    <button
+                      type="button"
+                      class="admin-action admin-action--approve"
+                      (click)="approveOne(row)"
+                    >
                       {{ 'ADMIN.APPROVE' | translate }}
                     </button>
                   }
                   @if (rowRejectVisible()) {
-                    <button type="button" class="apple-btn apple-btn--dark" (click)="rejectOne(row)">
+                    <button
+                      type="button"
+                      class="admin-action admin-action--reject"
+                      (click)="rejectOne(row)"
+                    >
                       {{ 'ADMIN.REJECT' | translate }}
                     </button>
                   }
                   @if (rowUnapproveVisible()) {
-                    <button type="button" class="apple-btn apple-btn--dark" (click)="unapproveOne(row)">
+                    <button
+                      type="button"
+                      class="admin-action admin-action--reject"
+                      (click)="unapproveOne(row)"
+                    >
                       {{ 'ADMIN.UNAPPROVE' | translate }}
                     </button>
                   }
-                </div>
+                </footer>
+
               </div>
-            </div>
-          </div>
-        }
-      </div>
-    }
+            </li>
+          }
+        </ul>
+      }
+
+    </div>
   </div>
 </section>

@@ -81,6 +81,10 @@ The color story is starkly binary. Product sections alternate between pure black
 | Micro Bold | SF Pro Text | 12px (0.75rem) | 600 | 1.33 | -0.12px | Bold fine print |
 | Nano | SF Pro Text | 10px (0.63rem) | 400 | 1.47 | -0.08px | Legal text, smallest size |
 
+### Bilingual (Arabic + English) — Layoff Egypt
+
+For mixed-script stories, RTL/LTR behavior, Arabic line heights, and a single Arabic font stack aligned with this system, see **`TYPOGRAPHY.md`** in the project root. Latin rules in this section still apply to English UI; Arabic-specific tuning uses `--type-*` tokens in `src/styles/apple-design.scss`.
+
 ### Principles
 - **Optical sizing as philosophy**: SF Pro automatically switches between Display and Text optical sizes. Display versions have wider letter spacing and thinner strokes optimized for large sizes; Text versions are tighter and sturdier for small sizes. This means the font literally changes its DNA based on context.
 - **Weight restraint**: The scale spans 300 (light) to 700 (bold) but most text lives at 400 (regular) and 600 (semibold). Weight 300 appears only on large decorative text. Weight 700 is rare, used only for bold card titles.

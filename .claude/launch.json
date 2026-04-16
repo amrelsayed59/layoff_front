@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Angular Dev Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start"],
+      "port": 4200
+    },
+    {
+      "name": "SSR Production Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "serve:ssr:layoff-egypt"],
+      "port": 4000
+    }
+  ]
+}

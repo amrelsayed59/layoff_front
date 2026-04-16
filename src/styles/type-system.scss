@@ -1,0 +1,282 @@
+/**
+ * Global typography utilities — bilingual EN/AR (see TYPOGRAPHY.md).
+ * Uses --type-ui-* set on `html` in styles.scss + tokens from apple-design.scss.
+ */
+
+/* -------------------------------------------------------------------------- */
+/* Headings */
+/* -------------------------------------------------------------------------- */
+
+/** Marketing / hero title — set `color` on parent (e.g. dark section). */
+.type-heading-hero {
+  font-family: var(--type-ui-font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.07;
+  letter-spacing: -0.28px;
+  color: inherit;
+  margin: 0;
+  text-align: center;
+}
+
+html[lang='ar'] .type-heading-hero {
+  letter-spacing: 0; /* was -0.02em — negative spacing breaks Arabic joins */
+}
+
+/** Section titles (page sections, major breaks). */
+.type-heading-section {
+  font-family: var(--type-ui-font-display);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: var(--type-ui-lh-heading);
+  letter-spacing: -0.02em;
+  color: var(--apple-near-black);
+  margin: 0 0 var(--type-space-block);
+}
+
+html[lang='ar'] .type-heading-section {
+  letter-spacing: 0; /* was -0.01em — negative spacing breaks Arabic joins */
+}
+
+/** Card titles, story company lines, dialog titles. */
+.type-heading-card {
+  /* --type-font-mixed: Cairo first so Arabic company names render correctly in EN locale */
+  font-family: var(--type-font-mixed);
+  font-weight: 600;
+  font-size: clamp(1.25rem, 2.8vw, 1.375rem);
+  line-height: var(--type-ui-lh-heading);
+  letter-spacing: -0.022em;
+  color: var(--apple-near-black);
+  margin: 0 0 var(--type-space-tight);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  /* calt: contextual alternates — required for correct Arabic letter connections */
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+}
+
+html[lang='ar'] .type-heading-card {
+  letter-spacing: 0; /* was -0.01em — any negative value breaks Arabic joins */
+}
+
+/** Subheading / step labels. */
+.type-heading-sub {
+  font-family: var(--type-ui-font);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--apple-near-black);
+  margin: 0 0 var(--type-space-tight);
+}
+
+html[lang='ar'] .type-heading-sub {
+  letter-spacing: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Body & story (long-form reading) */
+/* -------------------------------------------------------------------------- */
+
+/** Default app body copy (forms, descriptions, lead paragraphs). */
+.type-body {
+  /* Mixed stack: body paragraphs may contain Arabic quotes or terms in EN locale */
+  font-family: var(--type-font-mixed);
+  font-size: 1.0625rem;
+  line-height: var(--type-ui-lh-body);
+  letter-spacing: -0.374px;
+  font-weight: 400;
+  color: var(--apple-text-secondary);
+}
+
+/**
+ * Story / narrative blocks — optimized measure and leading for long sessions.
+ * Pair with dir="auto" on the element for mixed-script user content.
+ */
+.type-story {
+  /* --type-font-mixed places Cairo before SF Pro so Arabic renders correctly
+     in EN locale. The explicit fallbacks from the old rule are now in the token. */
+  font-family: var(--type-font-mixed);
+  font-size: 1.0625rem;
+  line-height: var(--type-ui-lh-body);
+  letter-spacing: -0.374px;
+  font-weight: 400;
+  color: var(--apple-text-secondary);
+  max-width: 65ch;
+  overflow-wrap: break-word;
+  text-align: start;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  text-wrap: pretty;
+}
+
+html[lang='ar'] .type-story {
+  letter-spacing: 0;
+}
+
+/** Secondary line (role, supporting detail). */
+.type-secondary {
+  /* Mixed stack: role titles are user-submitted and may be in Arabic */
+  font-family: var(--type-font-mixed);
+  font-size: 0.875rem;
+  line-height: 1.43;
+  letter-spacing: -0.12px;
+  font-weight: 400;
+  color: var(--apple-text-tertiary);
+  overflow-wrap: anywhere;
+}
+
+/** Intro / lead paragraphs. */
+.type-lead {
+  font-family: var(--type-font-mixed);
+  font-size: 1.0625rem;
+  line-height: var(--type-ui-lh-body);
+  letter-spacing: -0.374px;
+  color: var(--apple-text-secondary);
+  max-width: 65ch;
+  margin: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Filters, forms, overlines */
+/* -------------------------------------------------------------------------- */
+
+/** Uppercase section labels (“Refine”, “Active filters”). */
+.type-overline {
+  font-family: var(--type-ui-font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--apple-text-tertiary);
+  margin: 0;
+}
+
+html[lang='ar'] .type-overline {
+  letter-spacing: 0.04em;
+}
+
+/** Field labels above inputs (search, selects). */
+.type-field-label {
+  font-family: var(--type-ui-font);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  color: var(--apple-text-secondary);
+}
+
+html[lang='ar'] .type-field-label {
+  letter-spacing: 0.04em;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Metadata: tags, dates, filters, captions */
+/* -------------------------------------------------------------------------- */
+
+.type-meta {
+  /* Mixed stack: used for story previews, filter chip values, admin row previews */
+  font-family: var(--type-font-mixed);
+  font-size: 0.75rem;
+  line-height: var(--type-ui-lh-caption);
+  letter-spacing: -0.12px;
+  font-weight: 500;
+  color: var(--apple-text-tertiary);
+  overflow-wrap: anywhere;
+}
+
+/** Uppercase micro labels (timeline month, filter group labels). */
+.type-meta-label {
+  font-family: var(--type-ui-font);
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--apple-text-tertiary);
+}
+
+html[lang='ar'] .type-meta-label {
+  letter-spacing: 0.04em;
+}
+
+/** Slightly stronger metadata (e.g. year, numeric date). */
+.type-meta-strong {
+  font-family: var(--type-ui-font);
+  font-size: 0.8125rem;
+  line-height: var(--type-ui-lh-caption);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--apple-text-secondary);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Buttons & interactive text */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Text inside custom buttons / links (Apple + app buttons).
+ * Use with .apple-btn, .apple-link; keeps 17px rhythm and UI font.
+ */
+.type-button {
+  font-family: var(--type-ui-font);
+  font-size: 1.0625rem;
+  line-height: 1.35;
+  font-weight: 400;
+}
+
+/** Smaller control labels (tabs, compact toolbars). */
+.type-button-sm {
+  font-family: var(--type-ui-font);
+  font-size: 0.875rem;
+  line-height: 1.43;
+  font-weight: 400;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Mixed-script helpers */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Marks a block where direction should follow content (mixed AR/EN).
+ * Prefer setting dir="auto" in HTML; this class documents intent in CSS-only contexts.
+ */
+.type-mixed-script {
+  unicode-bidi: isolate;
+  font-family: var(--type-font-mixed);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Global Arabic letter-spacing correction                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Problem: CSS letter-spacing is applied after OpenType shaping. For Arabic
+ * connected script, any non-zero letter-spacing breaks the visual joins between
+ * letters — even small negative values like -0.12px are harmful.
+ *
+ * This rule targets elements where:
+ *   1. dir="auto" is set (user content — company names, roles, story text)
+ *   2. The browser has detected RTL content inside (Arabic text present)
+ *
+ * The :dir(rtl) pseudo-class reflects computed directionality, not the DOM
+ * attribute — so it activates only when Arabic/RTL content is actually present.
+ *
+ * Specificity: [dir='auto'] (0,1,0) + :dir(rtl) (0,1,0) = 0,2,0.
+ * This outranks any single class (0,1,0) without needing !important.
+ *
+ * Browser support: Chrome 120+, Firefox 49+, Safari 16.4+.
+ * In older browsers the rule is silently ignored; the font-stack fix (Cairo
+ * via --type-font-mixed) still applies as the primary improvement.
+ */
+[dir='auto']:dir(rtl) {
+  letter-spacing: 0;
+}
+
+/**
+ * Full AR locale: zero out all negative letter-spacing on the html element
+ * itself so any class that forgets an html[lang='ar'] override is safe.
+ */
+html[lang='ar'] {
+  letter-spacing: 0;
+}

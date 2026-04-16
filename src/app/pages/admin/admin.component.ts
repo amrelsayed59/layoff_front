@@ -315,9 +315,7 @@ export class AdminComponent implements OnInit {
     };
     return this.dialog
       .open(ConfirmDialogComponent, {
-        width: 'min(420px, 92vw)',
-        autoFocus: 'dialog',
-        panelClass: 'apple-dialog-panel',
+        // width / panelClass / autoFocus come from MAT_DIALOG_DEFAULT_OPTIONS
         data,
       })
       .afterClosed();

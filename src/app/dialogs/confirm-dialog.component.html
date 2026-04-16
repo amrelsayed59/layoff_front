@@ -1,14 +1,14 @@
-<h2 mat-dialog-title class="dialog-title apple-section-heading">{{ data.title }}</h2>
-<mat-dialog-content class="dialog-body apple-body">{{ data.message }}</mat-dialog-content>
-<mat-dialog-actions align="end" class="dialog-actions">
-  <button type="button" class="apple-link" (click)="dialogRef.close(false)">
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content class="apple-body">{{ data.message }}</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="button" class="apple-btn apple-btn--ghost" (click)="dialogRef.close(false)">
     {{ 'DIALOG.CANCEL' | translate }}
   </button>
   <button
     type="button"
     class="apple-btn"
     [class.apple-btn--primary]="data.confirmColor !== 'warn'"
-    [class.apple-btn--dark]="data.confirmColor === 'warn'"
+    [class.apple-btn--danger]="data.confirmColor === 'warn'"
     (click)="dialogRef.close(true)"
   >
     {{ data.confirmLabel }}

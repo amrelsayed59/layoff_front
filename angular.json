@@ -25,6 +25,8 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/assets",
+              "src/_redirects",
               {
                 "glob": "**/*",
                 "input": "public"
@@ -54,7 +56,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",

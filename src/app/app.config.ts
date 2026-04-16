@@ -3,7 +3,6 @@ import { ApplicationConfig, provideAppInitializer, provideBrowserGlobalErrorList
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig } from '@angular/material/dialog';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -43,7 +42,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideNativeDateAdapter(),
     provideRouter(routes),
-    provideClientHydration(withEventReplay()),
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: dialogDefaults },
   ],
 };

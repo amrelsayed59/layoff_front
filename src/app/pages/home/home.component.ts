@@ -48,7 +48,7 @@ export class HomeComponent implements AfterViewInit {
   private browseFilters: StoryBrowseFilters = { search: '', industry: '', reason: '' };
 
   private page = 1;
-  private readonly limit = 10;
+  private readonly limit = 25;
   private inFlight = false;
   private readonly requestSeq = signal(0);
 

@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Injector,
+  ViewChild,
+  afterNextRender,
+  inject,
+  signal,
+} from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -29,6 +38,7 @@ import { ReportStoryDialogComponent } from '../../dialogs/report-story-dialog.co
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements AfterViewInit {
+  private readonly injector = inject(Injector);
   private readonly storiesApi = inject(StoriesApiService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
@@ -48,7 +58,7 @@ export class HomeComponent implements AfterViewInit {
   private browseFilters: StoryBrowseFilters = { search: '', industry: '', reason: '' };
 
   private page = 1;
-  private readonly limit = 25;
+  private readonly limit = 5;
   private inFlight = false;
   private readonly requestSeq = signal(0);
 
@@ -133,8 +143,11 @@ export class HomeComponent implements AfterViewInit {
   /**
    * Loads the next page and appends results.
    */
+  /**
+   * Fetches the next page when the bottom sentinel intersects the viewport.
+   */
   private loadMore(): void {
-    if (!this.hasMore() || this.inFlight || this.loading()) return;
+    if (this.inFlight || this.loadingMore() || !this.hasMore()) return;
     this.page += 1;
     this.loadPage({ append: true });
   }
@@ -163,16 +176,23 @@ export class HomeComponent implements AfterViewInit {
         reason: reason || undefined,
       })
       .subscribe({
-        next: (rows) => {
+        next: (res) => {
           // Ignore outdated responses (race-safe when quickly changing filters/search).
           if (this.requestSeq() !== seq) return;
 
+          const rows = res.stories;
+          const total = res.totalCount;
           const nextList = opts.append ? [...this.stories(), ...rows] : rows;
           this.stories.set(nextList);
-          this.hasMore.set(rows.length === this.limit);
+          this.hasMore.set(this.page * this.limit < total);
           this.loading.set(false);
           this.loadingMore.set(false);
           this.inFlight = false;
+          // Re-attach observer after DOM updates so a still-visible sentinel triggers the next page
+          // (IntersectionObserver may not fire again if intersection ratios barely change).
+          if (this.hasMore()) {
+            afterNextRender(() => this.setupInfiniteScroll(), { injector: this.injector });
+          }
         },
         error: () => {
           if (this.requestSeq() !== seq) return;
@@ -185,6 +205,9 @@ export class HomeComponent implements AfterViewInit {
   }
 
   private setupInfiniteScroll(): void {
+    if (typeof IntersectionObserver === 'undefined') {
+      return;
+    }
     const el = this.sentinel?.nativeElement;
     if (!el) return;
     // Disconnect any previous observer (hot reload / re-init safety).
@@ -196,7 +219,7 @@ export class HomeComponent implements AfterViewInit {
           this.loadMore();
         }
       },
-      { root: null, rootMargin: '600px 0px', threshold: 0.01 },
+      { root: null, rootMargin: '50px 0px', threshold: 0.01 },
     );
     this.observer.observe(el);
   }

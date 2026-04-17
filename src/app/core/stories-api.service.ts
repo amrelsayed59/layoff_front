@@ -2,7 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { API_BASE_URL } from './api.tokens';
-import type { AdminStoryRow, PendingStory, PublishedStory } from '../data/story.models';
+import type {
+  AdminStoryRow,
+  ApprovedStoriesPage,
+  PendingStory,
+  PublishedStory,
+} from '../data/story.models';
 
 export type StoryStatusUpdate = 'approved' | 'rejected';
 
@@ -43,7 +48,7 @@ export class StoriesApiService {
   private readonly http = inject(HttpClient);
   private readonly apiBaseUrl = inject(API_BASE_URL);
 
-  /** GET `/stories` (approved stories). */
+  /** GET `/stories` (approved stories, paginated + total count). */
   getApproved(query?: Partial<StoriesQuery>) {
     let params = new HttpParams();
     if (query?.page) params = params.set('page', String(query.page));
@@ -51,7 +56,7 @@ export class StoriesApiService {
     if (query?.search) params = params.set('search', query.search);
     if (query?.industry) params = params.set('industry', query.industry);
     if (query?.reason) params = params.set('reason', query.reason);
-    return this.http.get<PublishedStory[]>(`${this.apiBaseUrl}/stories`, { params });
+    return this.http.get<ApprovedStoriesPage>(`${this.apiBaseUrl}/stories`, { params });
   }
 
   /** POST `/stories` (submit story). */

@@ -24,6 +24,12 @@ export interface PublishedStory {
   fullText?: string;
 }
 
+/** GET `/stories` paginated body. */
+export interface ApprovedStoriesPage {
+  stories: PublishedStory[];
+  totalCount: number;
+}
+
 /**
  * A user-submitted report (subset for list UI).
  */

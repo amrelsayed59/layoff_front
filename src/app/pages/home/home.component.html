@@ -132,15 +132,17 @@
           />
         }
       </div>
-      <div class="home-load-more">
-        @if (loadingMore()) {
-          <div class="home-bottom-loader" aria-label="{{ 'HOME.LOADING_MORE' | translate }}">
-            <span class="home-dot"></span><span class="home-dot"></span
-            ><span class="home-dot"></span>
-          </div>
-        }
-        <div #sentinel class="home-sentinel" aria-hidden="true"></div>
-      </div>
     }
+
+    <!-- Sentinel stays outside the skeleton @if so #sentinel exists in ngAfterViewInit. -->
+    <div class="home-load-more">
+      @if (loadingMore()) {
+        <div class="home-bottom-loader" aria-label="{{ 'HOME.LOADING_MORE' | translate }}">
+          <span class="home-dot"></span><span class="home-dot"></span
+          ><span class="home-dot"></span>
+        </div>
+      }
+      <div #sentinel class="home-sentinel" aria-hidden="true"></div>
+    </div>
   </div>
 </section>

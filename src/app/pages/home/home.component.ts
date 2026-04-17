@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { take } from 'rxjs';
 import type { PublishedStory } from '../../data/story.models';
 import { StoriesApiService } from '../../core/stories-api.service';
 import { HomeFiltersComponent } from './home-filters/home-filters';
@@ -31,6 +33,8 @@ export class HomeComponent implements AfterViewInit {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly translate = inject(TranslateService);
+  private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
 
   protected readonly stories = signal<PublishedStory[]>([]);
   protected readonly loading = signal(false);
@@ -52,6 +56,15 @@ export class HomeComponent implements AfterViewInit {
   @ViewChild('sentinel') private readonly sentinel?: ElementRef<HTMLElement>;
   private observer?: IntersectionObserver;
 
+  constructor() {
+    this.applyLandingSeo();
+
+    // Keep SEO in sync when user toggles language (EN/AR).
+    this.translate.onLangChange.subscribe(() => {
+      this.applyLandingSeo();
+    });
+  }
+
   /**
    * Handles filter updates from the home filters component (initial + every change).
    */
@@ -63,6 +76,47 @@ export class HomeComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     // Observer wiring only (no state writes here) to avoid ExpressionChangedAfterItHasBeenCheckedError.
     this.setupInfiniteScroll();
+  }
+
+  /**
+   * Sets static SEO meta tags for the landing page.
+   *
+   * This runs during prerender/SSR as well, ensuring the tags exist in the initial HTML source
+   * (e.g. "View Source") for Googlebot and social preview scrapers.
+   */
+  private applyLandingSeo(): void {
+    const keys: string[] = ['HOME.SEO.TITLE', 'HOME.SEO.DESCRIPTION', 'HOME.SEO.KEYWORDS'];
+
+    this.translate
+      .get(keys)
+      .pipe(take(1))
+      .subscribe((t) => {
+        const title = t['HOME.SEO.TITLE'];
+        const description = t['HOME.SEO.DESCRIPTION'];
+        const keywords = t['HOME.SEO.KEYWORDS'];
+
+        // Use the canonical production origin (safe for prerender/SSR where `window` is unavailable).
+        const url = 'https://layoff-egypt.netlify.app/';
+        const ogImage = `${url}og-image.svg`;
+
+        this.title.setTitle(title);
+
+        this.meta.updateTag({ name: 'description', content: description });
+        this.meta.updateTag({ name: 'keywords', content: keywords });
+        this.meta.updateTag({ name: 'robots', content: 'index,follow' });
+
+        this.meta.updateTag({ property: 'og:type', content: 'website' });
+        this.meta.updateTag({ property: 'og:site_name', content: 'Layoff Egypt' });
+        this.meta.updateTag({ property: 'og:title', content: title });
+        this.meta.updateTag({ property: 'og:description', content: description });
+        this.meta.updateTag({ property: 'og:url', content: url });
+        this.meta.updateTag({ property: 'og:image', content: ogImage });
+
+        this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+        this.meta.updateTag({ name: 'twitter:title', content: title });
+        this.meta.updateTag({ name: 'twitter:description', content: description });
+        this.meta.updateTag({ name: 'twitter:image', content: ogImage });
+      });
   }
 
   /**

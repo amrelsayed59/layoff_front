@@ -1,7 +1,9 @@
 <section class="apple-hero apple-hero--dark" aria-labelledby="hero-heading">
   <div class="apple-container">
     <div class="apple-hero__content">
-      <h1 id="hero-heading" class="apple-display-hero">{{ 'APP.TITLE' | translate }}</h1>
+      <h1 id="hero-heading" class="apple-display-hero">
+        {{ 'HOME.LANDING.HERO_H1' | translate }}
+      </h1>
       <p class="apple-hero__sub">{{ 'APP.SUBTITLE' | translate }}</p>
       <div class="apple-hero__cta">
         <a routerLink="/submit" class="apple-btn apple-btn--primary">
@@ -13,6 +15,48 @@
           (click)="scrollToAnchor($event, 'stories')"
         >
           {{ 'HOME.CTA_LEARN' | translate }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="apple-section apple-section--light home-seo">
+  <div class="apple-container">
+    <div class="home-seo__beat home-seo__beat--center">
+      <p class="type-lead home-seo__copy">
+        {{ 'HOME.LANDING.INTRO' | translate }}
+      </p>
+    </div>
+
+    <div class="home-seo__beat home-seo__beat--start">
+      <h2 class="type-heading-card home-seo__heading">
+        {{ 'HOME.LANDING.H2_WHY' | translate }}
+      </h2>
+      <p class="type-story home-seo__copy">
+        {{ 'HOME.LANDING.P_WHY' | translate }}
+      </p>
+    </div>
+
+    <div class="home-seo__beat home-seo__beat--end">
+      <h2 class="type-heading-card home-seo__heading">
+        {{ 'HOME.LANDING.H2_ANON' | translate }}
+      </h2>
+      <p class="type-story home-seo__copy">
+        {{ 'HOME.LANDING.P_ANON' | translate }}
+      </p>
+    </div>
+
+    <div class="home-seo__beat home-seo__beat--cta">
+      <h2 class="type-heading-section home-seo__heading">
+        {{ 'HOME.LANDING.H2_SHARE' | translate }}
+      </h2>
+      <p class="type-story home-seo__copy">
+        {{ 'HOME.LANDING.P_SHARE' | translate }}
+      </p>
+      <div class="home-seo__cta">
+        <a routerLink="/submit" class="apple-btn apple-btn--primary">
+          {{ 'HOME.CTA_SUBMIT' | translate }}
         </a>
       </div>
     </div>

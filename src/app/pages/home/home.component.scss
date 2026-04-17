@@ -2,6 +2,76 @@
   width: 100%;
 }
 
+/* -------------------------------------------------------------------------- */
+/* Landing SEO storytelling section (under hero) */
+/* -------------------------------------------------------------------------- */
+
+.home-seo {
+  /* Make this section feel distinct from hero + stories via whitespace only. */
+  padding-block: clamp(72px, 9vh, 104px);
+}
+
+.home-seo__beat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-seo .home-seo__beat + .home-seo__beat {
+  margin-top: clamp(104px, 10vh, 144px);
+}
+
+.home-seo__copy {
+  margin: 0;
+  max-width: 62ch;
+}
+
+/* Ensure consistent rhythm regardless of the typography utility used. */
+.home-seo__heading {
+  margin: 0;
+}
+
+/* 1) Intro — centered, calm, narrow measure */
+.home-seo__beat--center {
+  text-align: center;
+}
+
+.home-seo__beat--center .home-seo__copy {
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+/* 2) Why — start-aligned, slightly shifted (not centered). */
+.home-seo__beat--start {
+  max-width: 720px;
+  text-align: start;
+  margin-inline-end: auto;
+  margin-inline-start: clamp(0px, 5vw, 72px);
+}
+
+/* 3) Real experiences — end-aligned, mirrored from previous. */
+.home-seo__beat--end {
+  max-width: 720px;
+  text-align: start;
+  margin-inline-start: auto;
+  margin-inline-end: clamp(0px, 5vw, 72px);
+}
+
+/* 4) Share — centered CTA; visually stronger but still minimal. */
+.home-seo__beat--cta {
+  text-align: center;
+}
+
+.home-seo__beat--cta .home-seo__copy,
+.home-seo__beat--cta .home-seo__heading {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.home-seo__cta {
+  margin-top: 22px;
+}
+
 .home-empty {
   margin-top: 18px;
   padding: 22px;

@@ -1,0 +1,46 @@
+/**
+ * Angular Material MDC: inherit the app's bilingual font stack.
+ *
+ * We keep the Material theme typography config as-is, but override component
+ * font-family so user-facing text follows `body` / `html` locale variables
+ * (`--type-ui-font`, `--type-ui-font-display`).
+ *
+ * This file intentionally excludes Material Icons, which are isolated in
+ * `src/styles.scss` to keep ligatures readable across RTL/LTR.
+ */
+
+@mixin materialInheritAppFont() {
+  .mat-mdc-form-field,
+  .mat-mdc-form-field .mat-mdc-input-element,
+  .mat-mdc-form-field .mdc-text-field__input,
+  .mat-mdc-form-field .mat-mdc-select-value,
+  .mat-mdc-form-field .mat-mdc-floating-label,
+  .mat-mdc-button-base,
+  .mat-mdc-raised-button,
+  .mat-mdc-outlined-button,
+  .mat-mdc-stroked-button,
+  .mat-mdc-button,
+  .mat-mdc-icon-button,
+  .mat-mdc-select,
+  .mat-mdc-select-panel,
+  .mat-mdc-option,
+  .mat-mdc-dialog-container,
+  .mat-mdc-dialog-container .mat-mdc-dialog-surface,
+  .mat-mdc-snack-bar-container,
+  .mat-mdc-snack-bar-container .mdc-snackbar__label,
+  .mat-mdc-card,
+  .mat-mdc-slide-toggle,
+  .mat-mdc-checkbox,
+  .mat-mdc-radio-button,
+  .mat-mdc-tab-group,
+  .mat-mdc-tab,
+  .mat-mdc-list-item,
+  .mat-mdc-list-item .mdc-list-item__primary-text,
+  .mat-mdc-menu-item,
+  .mat-mdc-stepper,
+  .mat-mdc-table,
+  .mat-mdc-paginator {
+    font-family: inherit !important;
+  }
+}
+

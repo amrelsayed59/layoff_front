@@ -15,6 +15,21 @@
     "ARIA": "Language"
   },
   "HOME": {
+    "SEO": {
+      "TITLE": "Layoff Egypt – Real Layoff Stories from Egypt",
+      "DESCRIPTION": "Explore real anonymous layoff stories in Egypt. Share your experience and see what’s happening in the job market.",
+      "KEYWORDS": "layoff egypt, layoffs in egypt, job loss egypt, tech layoffs egypt"
+    },
+    "LANDING": {
+      "HERO_H1": "Layoff Egypt – Real Stories from the Egyptian Job Market",
+      "INTRO": "Layoff Egypt is a platform where people anonymously share their layoff experiences in Egypt, helping others understand layoffs in Egypt and the reality of job loss in Egypt—especially across tech layoffs in Egypt and fast-changing startups.",
+      "H2_WHY": "Why people are getting laid off in Egypt",
+      "P_WHY": "Layoffs in Egypt are impacting professionals across tech, startups, and traditional industries. Economic uncertainty, restructuring, and cost-cutting can lead to sudden job loss in Egypt—even for high performers. Layoff Egypt helps you understand what’s happening through real stories from the Egyptian job market.",
+      "H2_ANON": "Anonymous real experiences",
+      "P_ANON": "This platform collects anonymous layoff stories in Egypt so others can learn, prepare, and feel less alone. If you’re searching for “layoff egypt”, “tech layoffs egypt”, or “job loss egypt”, you’ll find real experiences written by people who lived it.",
+      "H2_SHARE": "Share your story",
+      "P_SHARE": "Sharing a layoff experience can help others navigate layoffs in Egypt. Submit your story anonymously and help build a clearer picture of the job market in Egypt."
+    },
     "TITLE": "Stories",
     "LEAD": "Real experiences shared by people in Egypt.",
     "STORIES_SECTION_TITLE": "Stories",

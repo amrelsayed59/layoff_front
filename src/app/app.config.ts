@@ -1,5 +1,10 @@
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { ApplicationConfig, provideAppInitializer, provideBrowserGlobalErrorListeners, inject } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+  inject,
+} from '@angular/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig } from '@angular/material/dialog';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -10,6 +15,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
 import { I18nLocaleService } from './core/i18n-locale.service';
 import { authInterceptor } from './core/auth.interceptor';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 /**
  * Default MatDialog configuration shared across the whole app.
@@ -43,5 +49,6 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter(),
     provideRouter(routes),
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: dialogDefaults },
+    provideClientHydration(withEventReplay()),
   ],
 };
